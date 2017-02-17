@@ -2,8 +2,7 @@ var loadNoise = () => {
   var yoff = 0;
   for (var y = 0; y < height; y+=cellSize) {
     var xoff = 0;
-    for (var x = 0; x < width; x+=cellSize) {
-      var index = (x + y * width) * 4;
+    for (var x = 0; x < width; x+=cellSize) {  
       var r = 60 + noise(xoff, yoff) * 80;
 	  fill(r)
 	  rect(x,y,cellSize,cellSize)
@@ -12,6 +11,7 @@ var loadNoise = () => {
      yoff += inc;
    }
   loadTerrain(3)
+  return exportTerrain()
 }
 var loadTerrain = (count) => {
   if(count === 0)
@@ -36,4 +36,17 @@ var loadTerrain = (count) => {
      yoff += inc;
   }
   loadTerrain(count-1)
+}
+var exportTerrain = () => {
+  loadPixels();
+  var map = []
+  for (var y = 0; y < height; y+=cellSize) {
+    for (var x = 0; x < width; x+=cellSize) {
+		var index = (x + y * width) * 4;
+		map.push(pixels[index])
+		map.push(pixels[index+1])
+		map.push(pixels[index+2])
+	}
+  }
+	return map
 }
