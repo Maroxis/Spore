@@ -8,7 +8,7 @@ function setup() {
   noStroke()
   noiseDetail(det)
   pixelDensity(1);
-  terrain = loadNoise()
+  terrain = loadTerrain()
   console.log(terrain)
   growFood();
   spores = []

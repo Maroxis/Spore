@@ -7,8 +7,11 @@ var growFood = () => {
       var index = ((x + y*(width/cellSize))*3)
       if(a > 0.5  && terrain[index + 1] - terrain[index + 0]  < maxFood){
         var r = random()
-        if (r > a)
-          terrain[index + 1] += 2
+        if (r > a){
+          terrain[index] -= 4
+          terrain[index + 1] -= 1
+          terrain[index + 2] -= 3
+        }
       }
       xoff += inc;
      }
