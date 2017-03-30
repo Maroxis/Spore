@@ -61,12 +61,12 @@ Spore.prototype.update = function(){
 }
 Spore.prototype.move = function(){
   var r = floor(random()*10)
-  if(r > 6 && this.checkMove(this.target.x + cellSize,this.y))
+  if(r > 5 && this.checkMove(this.target.x + cellSize,this.y))
     this.target.x += cellSize
   else if(r < 4 && this.checkMove(this.target.x - cellSize,this.y))
     this.target.x -= cellSize
   r = floor(random()*10)
-  if(r > 6 && this.checkMove(this.target.x,this.y - cellSize))
+  if(r > 5 && this.checkMove(this.target.x,this.y - cellSize))
     this.target.y -= cellSize
   else if(r < 4 && this.checkMove(this.target.x,this.y + cellSize))
     this.target.y += cellSize

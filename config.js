@@ -1,4 +1,4 @@
-var cellSize = 10;
+var cellSize = 8;
 var sporeSize = 12
 var sporeNum = 100
 var mapSize = 800

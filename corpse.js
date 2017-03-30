@@ -12,16 +12,16 @@ Corpse.prototype.getTiles = function(){
   var til = []
   til.push(indx)
   var y = this.y%cellSize
-  if(y < this.size && tiles[indx+cellNum].land ){
+  if(y < this.size && tiles[indx+cellNum] && tiles[indx+cellNum].land ){
     til.push(indx+cellNum)
   }
-  if(y > cellSize-this.size && tiles[indx-cellNum].land)
+  if(y > cellSize-this.size && tiles[indx-cellNum] && tiles[indx-cellNum].land)
     til.push(indx-cellNum)
     
   var x = this.x%cellSize
-  if(x < this.size && tiles[indx-1].land)
+  if(x < this.size && tiles[indx-1] && tiles[indx-1].land)
     til.push(indx-1)
-  if(x > cellSize-this.size && tiles[indx+1].land)
+  if(x > cellSize-this.size && tiles[indx+1] && tiles[indx+1].land)
     til.push(indx+1)
     
   return til
