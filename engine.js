@@ -29,6 +29,7 @@ Engine.prototype.update = function(){
     this.moveSpores()
     this.mveSprCounter = 0;
  }
+  if(this.crpDecCounter == 60){
     this.cDecay()
     this.crpDecCounter = 0;
  }
