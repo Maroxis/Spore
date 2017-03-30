@@ -1,7 +1,3 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/ikwNrFvnL3g
 tiles = []
 function setup() {
   ellipseMode(CENTER)
@@ -19,11 +15,12 @@ function setup() {
   }
   setInterval(moveSpores,200)
   setInterval(update,50)
-  //setInterval(debug,500)
+  setInterval(debug,500)
 }
 var debug = function(){
 	fps = floor(frameRate())
-//	console.log(tiles[0].food)
+	//console.log(corpses[0])
+	//console.log(corpses.length)
 }
 var moveSpores = function(){
   for(var i=0; i<spores.length;i++){
@@ -50,18 +47,24 @@ function update(){
 		  spores.splice(i,1)
 		}
 	}
+  for(var i = 0; i < corpses.length; i++){
+    corpses[i].decay();
+  }
 }
 function draw() {
   drawTiles()
-	for(var i =0; i< spores.length; i++){
-		spores[i].draw()
-	}
+	
 	for(var i =0; i< corpses.length; i++){
 		corpses[i].draw()
 	}
+	
+	for(var i =0; i< spores.length; i++){
+		spores[i].draw()
+	}
+	
 	if(fps!==0){
-	fill(255)
-	textSize(32);
-  text(fps, 10, 30) 
+  	fill(255)
+  	textSize(32);
+    text(fps, 10, 30) 
 	}
 }

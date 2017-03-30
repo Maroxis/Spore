@@ -8,6 +8,7 @@ Tile = function(x,y,land,fert,col){
 	else
 	  this.food = -(5/ceil(fert*10))
 	this.fertility = fert
+	this.bFert = 0; //bonus fertility from corpses etc.
 }
 Tile.prototype.draw = function(){
   for(var y = 0; y < cellSize; y++){

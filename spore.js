@@ -1,7 +1,7 @@
 Spore = function(x,y,size){
 	this.x = x || floor(random(mapSize/cellSize))*cellSize+cellSize/2
 	this.y = y || floor(random(mapSize/cellSize))*cellSize+cellSize/2
-	
+	this.speed = cellSpeed
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
@@ -23,7 +23,7 @@ Spore.prototype.checkMove = function(moveX,moveY){
 }
 Spore.prototype.update = function(){
   var index = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
-  //console.log(floor(this.x/cellSize),floor(this.y/cellSize),(mapSize/cellSize),index)
+  //////Food
   this.food-= 0.5;
   if(tiles[index].food < 0){
       this.food+= tiles[index].food
@@ -34,22 +34,30 @@ Spore.prototype.update = function(){
   }
   if(this.food < 0)
     this.food = 0;
-  else if(this.food > 70 && this.life < 100)
-    this.life++
+    
+  //////move
+  if(!tiles[index].land){
+    this.speed = this.speed/2
+  }
   
   if(this.target.x > this.x)
-    this.x+=cellSpeed
+    this.x+=this.speed
   else if(this.target.x < this.x)
-    this.x-=cellSpeed
+    this.x-=this.speed
   if(this.target.y > this.y)
-    this.y+=cellSpeed
+    this.y+=this.speed
   else if(this.target.y < this.y)
-    this.y-=cellSpeed
-    
-  if(this.food < 1){
+    this.y-=this.speed
+  
+  this.speed = cellSpeed
+  
+  /////life
+  if(this.food > 70 && this.life < 100)
+    this.life++
+  else if(this.food < 1){
     this.life--;
   }
-  return(this.life > 0)
+  return(this.life > 0) //alive
 }
 Spore.prototype.move = function(){
   var r = floor(random()*10)
