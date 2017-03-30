@@ -33,8 +33,8 @@ Corpse.prototype.draw =function(){
 }
 Corpse.prototype.decay = function(){
   for(var i = 0; i < this.tileIndx.length;i++){
-    this.food-=0.01;
-    tiles[this.tileIndx[i]].bFert += 0.004;
+    this.food-=0.1;
+    tiles[this.tileIndx[i]].bFert += 0.04;
     if(this.food <= 0){
       corpses.splice(corpses.indexOf(this),1);
       spores.push(new Spore())
