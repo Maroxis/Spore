@@ -1,22 +1,8 @@
-var growFood = () => {
-  var yoff = 0;
-  for (var y = 0; y < height/cellSize; y++) {
-    var xoff = 0;
-    for (var x = 0; x < width/cellSize; x++) {
-      var a = noise(xoff, yoff);
-      var index = ((x + y*(width/cellSize))*3)
-      if(a > 0.5  && terrain[index + 1] - terrain[index + 0]  < maxFood){
-        var r = random()
-        if (r > a){
-          terrain[index] -= 4
-          terrain[index + 1] -= 1
-          terrain[index + 2] -= 3
-        }
-      }
-      xoff += inc;
-     }
-     yoff += inc;
+var growFood = function(){
+  for(var i = 0; i < tiles.length; i++){
+    if(tiles[i].land && tiles[i].food < maxFood && tiles[i].fertility > Math.random())
+      tiles[i].food += 0.2
   }
-  console.log(terrain[1]-terrain[0])
+  //console.log(tiles[0])
   setTimeout(growFood,(1000/foodGrowRate))
 }
