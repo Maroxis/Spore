@@ -1,5 +1,6 @@
 tiles = []
 function setup() {
+  mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
   createCanvas(mapSize, mapSize);
   noStroke()
