@@ -13,7 +13,7 @@ Spore.prototype.draw = function(){
 	ellipse(this.x,this.y,this.size)
 }
 Spore.prototype.checkMove = function(moveX,moveY){
-  if(moveX > mapSize-cellSize || moveX < 0 || moveY > mapSize-cellSize || moveY < 0)
+  if(moveX > mapSize-cellSize/2 || moveX < cellSize/2 || moveY > mapSize-cellSize/2 || moveY < cellSize/2)
     return false;
   for(var i=0; i<spores.length;i++){
     if(moveX == spores[i].x && moveY == spores[i].y)
