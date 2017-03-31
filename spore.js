@@ -21,11 +21,18 @@ Spore.prototype.checkMove = function(moveX,moveY){
 Spore.prototype.checkCollision = function(){
   for(var i = 0; i < spores.length; i++){
     if(i != spores.indexOf(this) && this.tileArea == spores[i].tileArea && this.chckCol(spores[i])){
-					return spores[i];
+					return [1,spores[i]];
     }
   }
+  for(i = 0; i < corpses.length; i++){
+    if(this.tileArea == corpses[i].tileArea && this.chckCol(corpses[i])){
+      return [2,corpses[i]]
+    }
+  }
+  return [0];
 }
 Spore.prototype.update = function(){
+  this.tileArea = this.chckArea();
   var index = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
   //////Food
   this.food-= 0.5;
@@ -36,10 +43,14 @@ Spore.prototype.update = function(){
   }
   else if(this.food < 100){
     var sp = this.checkCollision()
-    if( sp && random() > 0.5){ //eat other spore
-      sp.life-=5;
+    if( sp[0] == 1 && random() > 0.5){ //eat other spore
+      sp[1].life-=5;
       this.food+=5;
-    }else{ // eat grass
+    }else if(sp[0] == 2 && random() > 0.5){ //eat corpse
+      sp[1].food-=2;
+      this.food+=2;
+    }
+    else{ // eat grass
     this.food+= 1
     tiles[index].food-= 1;
     }

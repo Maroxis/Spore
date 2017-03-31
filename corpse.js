@@ -4,8 +4,16 @@ Corpse = function(x,y,size,food){
   this.size = size
   this.food = food + 10;
   this.tileIndx = this.getTiles()
+  this.tileArea = this.chckArea();
 }
-
+Corpse.prototype.chckArea = function(){
+	this.tileArea = 0;
+	var indx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
+	if(indx%cellNum > floor(cellNum/2)) // 0 1 // 0 0 // areas
+		this.tileArea++;			            // 0 1 // 2 2 // 0-3
+	if(indx > floor(cellNum*(cellNum/2)))
+		this.tileArea+=2;
+}
 Corpse.prototype.getTiles = function(){
   var indx = floor(this.y/cellSize)*(cellNum)+floor(this.x/cellSize)
   var til = []
@@ -33,7 +41,7 @@ Corpse.prototype.draw =function(){
 Corpse.prototype.decay = function(){
   for(var i = 0; i < this.tileIndx.length;i++){
     this.food-=0.1;
-    tiles[this.tileIndx[i]].bFert += 0.04;
+    tiles[this.tileIndx[i]].bFert += 0.02;
     if(this.food <= 0){
       corpses.splice(corpses.indexOf(this),1);
       spores.push(new Spore())

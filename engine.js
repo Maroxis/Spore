@@ -58,7 +58,6 @@ Engine.prototype.updateSpores = function(){
 		  }
 		  spores.splice(i,1)
 		}
-		spores[i].chckArea();
 	}
 }
 Engine.prototype.cDecay = function(){ //corpses decay
