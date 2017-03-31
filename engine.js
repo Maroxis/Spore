@@ -60,19 +60,6 @@ Engine.prototype.updateSpores = function(){
 		}
 		spores[i].chckArea();
 	}
-	this.chkCol();
-}
-Engine.prototype.chkCol = function(){
-	for(var i = 0; i < spores.length; i++){
-		for(var j = spores.length-1; j > i; j--){
-			if(spores[i].tileArea == spores[j].tileArea){
-				if(spores[i].chckCol(spores[j])){	
-					spores[i].life = 0;
-					spores[j].life = 0;
-				}
-			}
-		}
-	}
 }
 Engine.prototype.cDecay = function(){ //corpses decay
   for(var i = 0; i < corpses.length; i++){

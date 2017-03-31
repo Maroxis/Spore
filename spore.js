@@ -18,19 +18,33 @@ Spore.prototype.checkMove = function(moveX,moveY){
     return false;
   return true;
 }
+Spore.prototype.checkCollision = function(){
+  for(var i = 0; i < spores.length; i++){
+    if(i != spores.indexOf(this) && this.tileArea == spores[i].tileArea && this.chckCol(spores[i])){
+					return spores[i];
+    }
+  }
+}
 Spore.prototype.update = function(){
   var index = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
   //////Food
   this.food-= 0.5;
   if(tiles[index].food < 0){
       this.food+= tiles[index].food
+      if(this.food < 0)
+       this.food = 0;
   }
   else if(this.food < 100){
+    var sp = this.checkCollision()
+    if( sp && random() > 0.5){ //eat other spore
+      sp.life-=5;
+      this.food+=5;
+    }else{ // eat grass
     this.food+= 1
     tiles[index].food-= 1;
+    }
   }
-  if(this.food < 0)
-    this.food = 0;
+  
     
   //////move
   if(!tiles[index].land){
@@ -51,9 +65,14 @@ Spore.prototype.update = function(){
   this.speed = cellSpeed
   
   /////life
-  if(this.food > 70 && this.life < 100)
-    this.life++
-  else if(this.food < 1){
+  if(this.food > 60 && this.life < 100){
+    this.life+=0.1
+    if(this.food > 90){
+      this.life+=0.4
+      this.food--;
+    }
+  }
+  else if(this.food === 0){
     this.life--;
   }
   return(this.life > 0) //alive
