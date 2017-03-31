@@ -34,10 +34,10 @@ Spore.prototype.update = function(){
     
   //////move
   if(!tiles[index].land){
-    this.speed = this.speed/2
+    this.speed -= this.speed/3
   }
   if(this.food < 30)
-
+    this.speed -= this.speed/5
   
   if(this.target.x > this.x)
     this.x+=this.speed
