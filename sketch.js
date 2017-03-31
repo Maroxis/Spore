@@ -10,7 +10,7 @@ function setup() {
   corpses = []
   
   fps = 0;
-  setInterval(debug,500)
+  //setInterval(debug,500)
   
   var engine = new Engine();
   engine.startup();

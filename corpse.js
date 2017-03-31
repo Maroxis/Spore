@@ -7,7 +7,6 @@ Corpse = function(x,y,size,food){
 }
 
 Corpse.prototype.getTiles = function(){
-  var cellNum = mapSize/cellSize
   var indx = floor(this.y/cellSize)*(cellNum)+floor(this.x/cellSize)
   var til = []
   til.push(indx)

@@ -8,10 +8,10 @@ Engine = function(){
 
 Engine.prototype.startup = function(){
   loadTerrain()
+  cellNum = mapSize/cellSize
   for(var i=0; i < sporeNum; i++){
 	spores.push(new Spore())
   }
-  
 }
 
 Engine.prototype.run = function(){
@@ -20,7 +20,7 @@ Engine.prototype.run = function(){
 
 Engine.prototype.update = function(){
   
- //var t = new Date().getTime();
+ var t = new Date().getTime();
  if(this.updSprCounter == 3){
     this.updateSpores()
     this.updSprCounter = 0;
@@ -43,7 +43,8 @@ Engine.prototype.update = function(){
   this.crpDecCounter++;
   this.grwFoodCounter++;
   setTimeout(this.update.bind(this),10)
-  //console.log(new Date().getTime() - t)
+  if(new Date().getTime() - t > 6)
+	console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
 }
 Engine.prototype.updateSpores = function(){
    for(var i =spores.length-1; i >= 0; i--){
@@ -56,6 +57,20 @@ Engine.prototype.updateSpores = function(){
 		    spores.push(new Spore())
 		  }
 		  spores.splice(i,1)
+		}
+		spores[i].chckArea();
+	}
+	this.chkCol();
+}
+Engine.prototype.chkCol = function(){
+	for(var i = 0; i < spores.length; i++){
+		for(var j = spores.length-1; j > i; j--){
+			if(spores[i].tileArea == spores[j].tileArea){
+				if(spores[i].chckCol(spores[j])){	
+					spores[i].life = 0;
+					spores[j].life = 0;
+				}
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@ Spore = function(x,y,size){
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
+	this.tileArea = 0;
 	
 	this.target = {x:this.x,y:this.y}
 }
@@ -15,10 +16,6 @@ Spore.prototype.draw = function(){
 Spore.prototype.checkMove = function(moveX,moveY){
   if(moveX > mapSize-cellSize/2 || moveX < cellSize/2 || moveY > mapSize-cellSize/2 || moveY < cellSize/2)
     return false;
-  for(var i=0; i<spores.length;i++){
-    if(moveX == spores[i].x && moveY == spores[i].y)
-      return false;
-  }
   return true;
 }
 Spore.prototype.update = function(){
@@ -39,6 +36,8 @@ Spore.prototype.update = function(){
   if(!tiles[index].land){
     this.speed = this.speed/2
   }
+  if(this.food < 30)
+
   
   if(this.target.x > this.x)
     this.x+=this.speed
@@ -59,7 +58,20 @@ Spore.prototype.update = function(){
   }
   return(this.life > 0) //alive
 }
-Spore.prototype.move = function(){
+Spore.prototype.chckArea = function(){
+	this.tileArea = 0;
+	var indx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
+	if(indx%cellNum > floor(cellNum/2)) // 0 1 // 0 0 // areas
+		this.tileArea++;			   // 0 1 // 2 2 // 0-3
+	if(indx > floor(cellNum*(cellNum/2)))
+		this.tileArea+=2;
+}
+Spore.prototype.chckCol = function(spore){
+	if(Math.pow((spore.x-this.x),2) + Math.pow((this.y-spore.y),2) <= Math.pow((this.size/2+spore.size/2),2)){
+		return true;
+	}
+}
+Spore.prototype.move = function(){	
   var r = floor(random()*10)
   if(r > 5 && this.checkMove(this.target.x + cellSize,this.y))
     this.target.x += cellSize
