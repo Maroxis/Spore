@@ -8,6 +8,7 @@ function setup() {
   pixelDensity(1);
   spores = []
   corpses = []
+  bloodT = []
   
   fps = 0;
   //setInterval(debug,500)
@@ -27,6 +28,10 @@ function draw() {
     tiles[i].draw()
   }
   updatePixels()
+  
+	for(var i =0; i< bloodT.length; i++){
+		bloodT[i].draw()
+	}
 	
 	for(var i =0; i< corpses.length; i++){
 		corpses[i].draw()

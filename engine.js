@@ -1,6 +1,6 @@
 Engine = function(){
   this.updSprCounter = 0;
-  this.mveSprCounter = 0;
+  this.bldCounter = 0;
   this.crpDecCounter = 0;
   this.grwFoodCounter = 0;
   
@@ -33,14 +33,23 @@ Engine.prototype.update = function(){
     this.growFood();
     this.grwFoodCounter = 0;
  }
+  if(this.bldCounter == 100){
+    this.bloodFade();
+    this.bldCounter = 0;
+  }
  
   this.updSprCounter++;
-  this.mveSprCounter++;
+  this.bldCounter++;
   this.crpDecCounter++;
   this.grwFoodCounter++;
   setTimeout(this.update.bind(this),10)
   if(new Date().getTime() - t > 8)
 	console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
+}
+Engine.prototype.bloodFade = function(){
+  for(var i =0; i< bloodT.length; i++){
+		bloodT[i].shrink()
+	}
 }
 Engine.prototype.updateSpores = function(){
    for(var i =spores.length-1; i >= 0; i--){

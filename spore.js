@@ -85,6 +85,7 @@ Spore.prototype.bite = function(target){
   if(target.alive){
     target.life-=5;
     this.food+=5;
+    bloodT.push(new Blood(target.x,target.y,target.size))
   } else{
     target.life-=2;
     this.food+=2;
