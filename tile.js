@@ -4,7 +4,7 @@ Tile = function(x,y,land,fert,col){
 	this.land = land // true/false
 	this.col = col
 	if(land)
-	  this.food = floor((maxFood/fert)/4);
+	  this.food = floor((maxFood/fert)/10);
 	else
 	  this.food = -(5/ceil(fert*10))
 	this.fertility = fert

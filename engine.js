@@ -25,7 +25,7 @@ Engine.prototype.update = function(){
     this.updateSpores()
     this.updSprCounter = 0;
  }
- if(this.mveSprCounter == 10){
+ if(this.mveSprCounter == 50){
     this.moveSpores()
     this.mveSprCounter = 0;
  }
@@ -43,7 +43,7 @@ Engine.prototype.update = function(){
   this.crpDecCounter++;
   this.grwFoodCounter++;
   setTimeout(this.update.bind(this),10)
-  if(new Date().getTime() - t > 6)
+  if(new Date().getTime() - t > 8)
 	console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
 }
 Engine.prototype.updateSpores = function(){
@@ -67,13 +67,14 @@ Engine.prototype.cDecay = function(){ //corpses decay
 }
 Engine.prototype.growFood = function(){
   for(var i = 0; i < tiles.length; i++){
+    if(tiles[i].bFert >= 0.05){
+        tiles[i].bFert -= 0.05
+        tiles[i].food += 0.05
+        if(tiles[i].bFert < 0)
+          tiles[i].bFert = 0
+    }
     if(tiles[i].land && tiles[i].food < maxFood && tiles[i].fertility > Math.random()){
-      tiles[i].food += 0.05 + tiles[i].bFert
-      if(tiles[i].bFert > 0){
-        tiles[i].bFert -= 0.01
-      if(tiles[i].bFert < 0)
-        tiles[i].bFert = 0
-      }
+      tiles[i].food += 0.1 
     }
   }
 }

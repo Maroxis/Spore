@@ -6,12 +6,21 @@ Spore = function(x,y,size){
 	this.size = size || sporeSize
 	this.life = 100;
 	this.tileArea = 0;
-	
+
 	this.target = {x:this.x,y:this.y}
 }
 Spore.prototype.draw = function(){
+  push()
+  translate(this.x,this.y)
+  rotate(PI/2+Math.atan2(this.target.y - this.y, this.target.x - this.x))//
 	fill(255,55+this.life*2,55+this.life*2,155+this.food)
-	ellipse(this.x,this.y,this.size)
+	ellipse(0,0,this.size)
+	fill(0,0,255,155+this.food)
+	//if(round(this.x) == (this.target.x) && round(this.y) == (this.target.y))
+	  //ellipse(0,0,this.size/2,this.size/3)
+	 //else
+	  ellipse(0,-this.size/5,this.size/2,this.size/3)
+	pop()
 }
 Spore.prototype.checkMove = function(moveX,moveY){
   if(moveX > mapSize-cellSize/2 || moveX < cellSize/2 || moveY > mapSize-cellSize/2 || moveY < cellSize/2)
@@ -64,13 +73,13 @@ Spore.prototype.update = function(){
   if(this.food < 30)
     this.speed -= this.speed/5
   
-  if(this.target.x > this.x)
+  if(this.target.x-1 > this.x)
     this.x+=this.speed
-  else if(this.target.x < this.x)
+  else if(this.target.x+1 < this.x)
     this.x-=this.speed
-  if(this.target.y > this.y)
+  if(this.target.y-1 > this.y)
     this.y+=this.speed
-  else if(this.target.y < this.y)
+  else if(this.target.y+1 < this.y)
     this.y-=this.speed
   
   this.speed = cellSpeed
@@ -104,14 +113,14 @@ Spore.prototype.chckCol = function(spore){
 Spore.prototype.move = function(){	
   var r = floor(random()*10)
   if(r > 5 && this.checkMove(this.target.x + cellSize,this.y))
-    this.target.x += cellSize
+    this.target.x = floor(this.target.x+cellSize)
   else if(r < 4 && this.checkMove(this.target.x - cellSize,this.y))
-    this.target.x -= cellSize
+    this.target.x = floor(this.target.x-cellSize)
   r = floor(random()*10)
   if(r > 5 && this.checkMove(this.target.x,this.y - cellSize))
-    this.target.y -= cellSize
+    this.target.y = floor(this.target.y - cellSize)
   else if(r < 4 && this.checkMove(this.target.x,this.y + cellSize))
-    this.target.y += cellSize
+    this.target.y = floor(this.target.y + cellSize)
   if(!this.checkMove(this.target.x,this.target.y)){
     this.target.x = this.x
     this.target.y = this.y
