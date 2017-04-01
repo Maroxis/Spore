@@ -1,10 +1,11 @@
-Corpse = function(x,y,size,food){
+Corpse = function(x,y,size,food,facing){
   this.x = x;
   this.y = y
   this.size = size
   this.food = food + 10;
   this.tileIndx = this.getTiles()
   this.tileArea = this.chckArea();
+  this.facing = facing
 }
 Corpse.prototype.chckArea = function(){
 	this.tileArea = 0;
@@ -35,8 +36,14 @@ Corpse.prototype.getTiles = function(){
 }
 
 Corpse.prototype.draw =function(){
-  fill(128,floor(100/ceil(this.food)),0,140 + this.food)
-  ellipse(this.x,this.y,this.size)
+  push()
+  translate(this.x,this.y)
+  rotate(this.facing)//
+	fill(128,floor(100/ceil(this.food)),0,140 + this.food)
+	ellipse(0,0,this.size*0.9,this.size)
+	fill(16,16,16,140+this.food)
+	ellipse(0,-this.size/5,this.size/2,this.size/3)
+	pop()
 }
 Corpse.prototype.decay = function(){
   for(var i = 0; i < this.tileIndx.length;i++){

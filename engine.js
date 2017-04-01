@@ -52,7 +52,7 @@ Engine.prototype.updateSpores = function(){
 		  	
 		  var index = floor(spores[i].y/cellSize)*(mapSize/cellSize)+floor(spores[i].x/cellSize)
 		  if(tiles[index].land){
-		    corpses.push(new Corpse(spores[i].x,spores[i].y,spores[i].size,spores[i].food))
+		    corpses.push(new Corpse(spores[i].x,spores[i].y,spores[i].size,spores[i].food,spores[i].facing))
 		  }else{
 		    spores.push(new Spore())
 		  }

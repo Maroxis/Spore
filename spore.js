@@ -7,20 +7,18 @@ Spore = function(x,y,size){
 	this.size = size || sporeSize
 	this.life = 100;
 	this.tileArea = 0;
+	this.facing = 0;
 
 	this.target = {x:this.x,y:this.y}
 }
 Spore.prototype.draw = function(){
   push()
   translate(this.x,this.y)
-  rotate(PI/2+Math.atan2(this.vel.y, this.vel.x))//
+  rotate(this.facing)
 	fill(255,55+this.life*2,55+this.life*2,155+this.food)
-	ellipse(0,0,this.size)
+	ellipse(0,0,this.size*0.9,this.size)
 	fill(0,0,255,155+this.food)
-	//if(round(this.x) == (this.target.x) && round(this.y) == (this.target.y))
-	  //ellipse(0,0,this.size/2,this.size/3)
-	 //else
-	  ellipse(0,-this.size/5,this.size/2,this.size/3)
+	ellipse(0,-this.size/5,this.size/2,this.size/3)
 	pop()
 }
 Spore.prototype.checkMove = function(){
@@ -122,4 +120,5 @@ Spore.prototype.chckCol = function(spore){
 Spore.prototype.move = function(){	
   this.vel.x = random(-1,1)
   this.vel.y = random(-1,1)
+  this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x)
 }
