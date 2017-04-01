@@ -2,6 +2,7 @@ Spore = function(x,y,size){
 	this.x = x || floor(random(mapSize/cellSize))*cellSize+cellSize/2
 	this.y = y || floor(random(mapSize/cellSize))*cellSize+cellSize/2
 	this.speed = cellSpeed
+	this.vel = {x:0,y:0}
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
@@ -12,7 +13,7 @@ Spore = function(x,y,size){
 Spore.prototype.draw = function(){
   push()
   translate(this.x,this.y)
-  rotate(PI/2+Math.atan2(this.target.y - this.y, this.target.x - this.x))//
+  rotate(PI/2+Math.atan2(this.vel.y, this.vel.x))//
 	fill(255,55+this.life*2,55+this.life*2,155+this.food)
 	ellipse(0,0,this.size)
 	fill(0,0,255,155+this.food)
@@ -22,10 +23,15 @@ Spore.prototype.draw = function(){
 	  ellipse(0,-this.size/5,this.size/2,this.size/3)
 	pop()
 }
-Spore.prototype.checkMove = function(moveX,moveY){
-  if(moveX > mapSize-cellSize/2 || moveX < cellSize/2 || moveY > mapSize-cellSize/2 || moveY < cellSize/2)
-    return false;
-  return true;
+Spore.prototype.checkMove = function(){
+  if(this.x < this.size/2)
+    this.x = this.size/2
+  else if(this.x > mapSize - this.size/2)
+    this.x = mapSize - this.size/2
+  if(this.y < this.size/2)
+    this.y = this.size/2
+  else if(this.y > mapSize - this.size/2)
+    this.y = mapSize - this.size/2
 }
 Spore.prototype.checkCollision = function(){
   for(var i = 0; i < spores.length; i++){
@@ -67,23 +73,26 @@ Spore.prototype.update = function(){
   
     
   //////move
+  var dx = this.vel.x
+  var dy = this.vel.y
+  
+  dx *= this.speed
+  dy *= this.speed
+  
   if(!tiles[index].land){
-    this.speed -= this.speed/3
+    dx *= 0.6
+    dy *= 0.6
   }
-  if(this.food < 30)
-    this.speed -= this.speed/5
+  if(this.food < 30){
+    dx *= 0.8
+    dy *= 0.8
+  }
   
-  if(this.target.x-1 > this.x)
-    this.x+=this.speed
-  else if(this.target.x+1 < this.x)
-    this.x-=this.speed
-  if(this.target.y-1 > this.y)
-    this.y+=this.speed
-  else if(this.target.y+1 < this.y)
-    this.y-=this.speed
+  this.x += dx
+  this.y += dy
   
-  this.speed = cellSpeed
-  
+  this.checkMove();
+
   /////life
   if(this.food > 60 && this.life < 100){
     this.life+=0.1
@@ -111,18 +120,6 @@ Spore.prototype.chckCol = function(spore){
 	}
 }
 Spore.prototype.move = function(){	
-  var r = floor(random()*10)
-  if(r > 5 && this.checkMove(this.target.x + cellSize,this.y))
-    this.target.x = floor(this.target.x+cellSize)
-  else if(r < 4 && this.checkMove(this.target.x - cellSize,this.y))
-    this.target.x = floor(this.target.x-cellSize)
-  r = floor(random()*10)
-  if(r > 5 && this.checkMove(this.target.x,this.y - cellSize))
-    this.target.y = floor(this.target.y - cellSize)
-  else if(r < 4 && this.checkMove(this.target.x,this.y + cellSize))
-    this.target.y = floor(this.target.y + cellSize)
-  if(!this.checkMove(this.target.x,this.target.y)){
-    this.target.x = this.x
-    this.target.y = this.y
-  }
+  this.vel.x = random(-1,1)
+  this.vel.y = random(-1,1)
 }
