@@ -10,6 +10,19 @@ Tile = function(x,y,land,fert,col){
 	this.fertility = fert
 	this.bFert = 0; //bonus fertility from corpses etc.
 }
+Tile.prototype.growFood = function(){
+  if(this.food < maxFood){
+    if(this.bFert >= 0.1){
+        this.bFert -= 0.1
+        this.food += 0.1
+        if(this.bFert < 0.1)
+          this.bFert = 0
+      }
+    if(this.fertility > Math.random()){
+      this.food += 0.1 
+    }
+  }
+}
 Tile.prototype.draw = function(){
   for(var y = 0; y < cellSize; y++){
     for(var x = 0; x < cellSize; x++){

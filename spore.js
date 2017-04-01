@@ -134,8 +134,8 @@ Spore.prototype.move = function(index){
   dy *= this.speed;
   
   if(this.bleedAmm > 0){
-    dx *= 0.7;
-    dy *= 0.7;
+    dx *= 0.8;
+    dy *= 0.8;
   }
   if(!tiles[index].land){
     dx *= 0.6;

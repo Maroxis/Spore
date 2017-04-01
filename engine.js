@@ -24,7 +24,7 @@ Engine.prototype.update = function(){
     this.updateSpores()
     this.updSprCounter = 0;
  }
-  if(this.crpDecCounter == 60){
+  if(this.crpDecCounter == 50){
     this.cDecay()
     this.crpDecCounter = 0;
  }
@@ -72,14 +72,7 @@ Engine.prototype.cDecay = function(){ //corpses decay
 }
 Engine.prototype.growFood = function(){
   for(var i = 0; i < tiles.length; i++){
-    if(tiles[i].bFert >= 0.05){
-        tiles[i].bFert -= 0.05
-        tiles[i].food += 0.05
-        if(tiles[i].bFert < 0)
-          tiles[i].bFert = 0
-    }
-    if(tiles[i].land && tiles[i].food < maxFood && tiles[i].fertility > Math.random()){
-      tiles[i].food += 0.1 
-    }
+    if(tiles[i].land)
+      tiles[i].growFood()
   }
 }
