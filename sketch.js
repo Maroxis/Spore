@@ -11,7 +11,7 @@ function setup() {
   bloodT = []
   
   fps = 0;
-  //setInterval(debug,500)
+  setInterval(debug,500)
   
   var engine = new Engine();
   engine.startup();
@@ -19,27 +19,12 @@ function setup() {
 }
 var debug = function(){
 	fps = floor(frameRate())
-	//console.log(corpses[0])
-	//console.log(corpses.length)
 }
 function draw() {
-  loadPixels()
-  for(var i = 0; i < tiles.length; i++){
-    tiles[i].draw()
-  }
-  updatePixels()
-  
-	for(var i =0; i< bloodT.length; i++){
-		bloodT[i].draw()
-	}
-	
-	for(var i =0; i< corpses.length; i++){
-		corpses[i].draw()
-	}
-	
-	for(var i =0; i< spores.length; i++){
-		spores[i].draw()
-	}
+  drawTiles()
+  drawBlood()
+  drawCorpses()
+  drawSpores();
 	
 	if(fps!==0){
   	fill(255)

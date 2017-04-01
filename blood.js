@@ -1,7 +1,7 @@
 Blood = function(x,y,size){
   this.x = x
   this.y = y
-  this.size = size/5
+  this.size = size/4
   this.age = 128
 }
 Blood.prototype.draw = function(){
@@ -10,6 +10,5 @@ Blood.prototype.draw = function(){
 }
 Blood.prototype.shrink = function(){
   this.age-=12;
-  if(this.age < 12)
-    splice(bloodT.indexOf(this),1)
+  return(this.age < 12)
 }
