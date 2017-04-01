@@ -9,6 +9,6 @@ Blood.prototype.draw = function(){
 	ellipse(this.x,this.y,this.size)
 }
 Blood.prototype.shrink = function(){
-  this.age-=12;
-  return(this.age < 12)
+  this.age-=8;
+  return(this.age <= 8)
 }

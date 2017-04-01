@@ -11,6 +11,9 @@ Spore = function(x,y,size){
 	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x);
   this.alive = true;
 	this.target = {x:this.x,y:this.y}
+	this.bleedAmm = 0;
+	this.bleeding = false;
+	this.tileInd = 0;
 }
 Spore.prototype.draw = function(){
   push()
@@ -21,6 +24,20 @@ Spore.prototype.draw = function(){
 	fill(0,0,255,155+this.food)
 	ellipse(0,-this.size/5,this.size/2,this.size/3)
 	pop()
+}
+Spore.prototype.bleed = function(){
+  if(this.life <= 0)
+    return
+  if(this.bleedAmm > 0){
+    this.life -= ceil(this.bleedAmm);
+    this.bleedAmm-= 0.2
+    bloodT.push(new Blood(this.x,this.y,this.size))
+  }
+  if(this.bleedAmm <= 0){
+    this.bleedAmm = 0;
+    this.bleeding = false;
+  }else
+    setTimeout(this.bleed.bind(this),1000-floor(this.bleedAmm*40))
 }
 Spore.prototype.checkMove = function(){
   if(this.x < this.size/2)
@@ -62,6 +79,11 @@ Spore.prototype.update = function(){
   if( sp && this.isFacing(sp) && random() < 0.4 ){
     this.bite(sp)
   } 
+  //bleed
+  if(this.bleedAmm > 0 && !this.bleeding){
+    this.bleeding = true;
+    this.bleed()
+  }
   /////life
     this.checkLife()
   //////move
@@ -83,6 +105,7 @@ Spore.prototype.isFacing = function(spore){
 Spore.prototype.bite = function(target){
   if(target.alive){
     target.life-=5;
+    target.bleedAmm+=1
     this.food+=5;
     bloodT.push(new Blood(target.x,target.y,target.size))
   } else{
@@ -95,12 +118,9 @@ Spore.prototype.eatGrass = function(tile){
   tile.food-= 1;
 }
 Spore.prototype.checkLife = function(){
-  if(this.food > 60 && this.life < 100){
-    this.life+=0.1;
-    if(this.food > 90){
-      this.life+=0.4;
-      this.food--;
-    }
+  if(!this.bleeding && this.food > 60 && this.life < 100 && random() < 0+this.food/500){
+    this.life+=1;
+    this.food-=1
   }
   else if(this.food === 0){
     this.life--;
@@ -113,13 +133,17 @@ Spore.prototype.move = function(index){
   dx *= this.speed;
   dy *= this.speed;
   
+  if(this.bleedAmm > 0){
+    dx *= 0.7;
+    dy *= 0.7;
+  }
   if(!tiles[index].land){
     dx *= 0.6;
     dy *= 0.6;
   }
   if(this.food < 30){
-    dx *= 0.8;
-    dy *= 0.8;
+    dx *= 0.9;
+    dy *= 0.9;
   }
   this.x += dx;
   this.y += dy;
