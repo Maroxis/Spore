@@ -6,6 +6,7 @@ Corpse = function(x,y,size,food,facing){
   this.tileIndx = this.getTiles()
   this.tileArea = this.chckArea();
   this.facing = facing
+  this.alive = false;
 }
 Corpse.prototype.chckArea = function(){
 	this.tileArea = 0;

@@ -2,13 +2,14 @@ Spore = function(x,y,size){
 	this.x = x || floor(random(mapSize/cellSize))*cellSize+cellSize/2
 	this.y = y || floor(random(mapSize/cellSize))*cellSize+cellSize/2
 	this.speed = cellSpeed
-	this.vel = {x:0,y:0}
+	this.vel = {x:random(-1,1),y:random(-1,1)}
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
 	this.tileArea = 0;
-	this.facing = 0;
-
+	this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x);
+	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x);
+  this.alive = true;
 	this.target = {x:this.x,y:this.y}
 }
 Spore.prototype.draw = function(){
@@ -34,15 +35,15 @@ Spore.prototype.checkMove = function(){
 Spore.prototype.checkCollision = function(){
   for(var i = 0; i < spores.length; i++){
     if(i != spores.indexOf(this) && this.tileArea == spores[i].tileArea && this.chckCol(spores[i])){
-					return [1,spores[i]];
+					return spores[i];
     }
   }
   for(i = 0; i < corpses.length; i++){
     if(this.tileArea == corpses[i].tileArea && this.chckCol(corpses[i])){
-      return [2,corpses[i]]
+      return corpses[i]
     }
   }
-  return [0];
+  return false;
 }
 Spore.prototype.update = function(){
   this.tileArea = this.chckArea();
@@ -56,21 +57,50 @@ Spore.prototype.update = function(){
   }
   else if(this.food < 100){
     var sp = this.checkCollision()
-    if( sp[0] == 1 && random() > 0.5){ //eat other spore
-      sp[1].life-=5;
-      this.food+=5;
-    }else if(sp[0] == 2 && random() > 0.5){ //eat corpse
-      sp[1].food-=2;
-      this.food+=2;
-    }
-    else{ // eat grass
-    this.food+= 1
-    tiles[index].food-= 1;
-    }
+    if( sp && random() > 0.5){ //bite target
+      this.bite(sp)
+    } 
+    else
+      this.eatGrass(tiles[index])
   }
   
-    
+  /////life
+    this.checkLife()
   //////move
+  if(this.rotate()){ //finished rotation
+    if(random() < 0.03){
+      this.changeDirection()
+    }else
+      this.move(index);
+  }
+  return(this.life > 0) //alive
+}
+Spore.prototype.bite = function(target){
+  if(target.alive){
+    target.life-=5;
+    this.food+=5;
+  } else{
+    target.life-=2;
+    this.food+=2;
+  }
+}
+Spore.prototype.eatGrass = function(tile){
+  this.food+= 1
+  tile.food-= 1;
+}
+Spore.prototype.checkLife = function(){
+  if(this.food > 60 && this.life < 100){
+    this.life+=0.1
+    if(this.food > 90){
+      this.life+=0.4
+      this.food--;
+    }
+  }
+  else if(this.food === 0){
+    this.life--;
+  }
+}
+Spore.prototype.move = function(index){
   var dx = this.vel.x
   var dy = this.vel.y
   
@@ -88,21 +118,18 @@ Spore.prototype.update = function(){
   
   this.x += dx
   this.y += dy
-  
   this.checkMove();
-
-  /////life
-  if(this.food > 60 && this.life < 100){
-    this.life+=0.1
-    if(this.food > 90){
-      this.life+=0.4
-      this.food--;
-    }
-  }
-  else if(this.food === 0){
-    this.life--;
-  }
-  return(this.life > 0) //alive
+}
+Spore.prototype.rotate = function(){
+  if(this.facing == this.tFacing)
+    return true
+  if(0.4 >  abs(this.facing - this.tFacing)){
+    this.facing = this.tFacing
+  }else if(this.facing < this.tFacing)
+    this.facing += 0.3
+  else
+    this.facing -= 0.3
+  return false;
 }
 Spore.prototype.chckArea = function(){
 	this.tileArea = 0;
@@ -117,8 +144,8 @@ Spore.prototype.chckCol = function(spore){
 		return true;
 	}
 }
-Spore.prototype.move = function(){	
+Spore.prototype.changeDirection = function(){	
   this.vel.x = random(-1,1)
   this.vel.y = random(-1,1)
-  this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x)
+  this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x)
 }

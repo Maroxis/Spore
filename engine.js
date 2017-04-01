@@ -25,10 +25,6 @@ Engine.prototype.update = function(){
     this.updateSpores()
     this.updSprCounter = 0;
  }
- if(this.mveSprCounter == 50){
-    this.moveSpores()
-    this.mveSprCounter = 0;
- }
   if(this.crpDecCounter == 60){
     this.cDecay()
     this.crpDecCounter = 0;
@@ -76,10 +72,5 @@ Engine.prototype.growFood = function(){
     if(tiles[i].land && tiles[i].food < maxFood && tiles[i].fertility > Math.random()){
       tiles[i].food += 0.1 
     }
-  }
-}
-Engine.prototype.moveSpores = function(){
-  for(var i=0; i<spores.length;i++){
-	spores[i].move()
   }
 }
