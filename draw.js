@@ -20,3 +20,6 @@ function drawSpores(){
 		spores[i].draw()
 	}
 }
+function drawDebug(){
+	debugTool.draw()
+}

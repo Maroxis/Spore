@@ -133,7 +133,7 @@ Spore.prototype.move = function(index){
   dx *= this.speed;
   dy *= this.speed;
   
-  if(this.bleedAmm > 0){
+  if(this.bleeding){
     dx *= 0.8;
     dy *= 0.8;
   }

@@ -1,4 +1,3 @@
-tiles = []
 function setup() {
   mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
@@ -6,29 +5,23 @@ function setup() {
   noStroke()
   noiseDetail(det)
   pixelDensity(1);
+  
+  tiles = []
   spores = []
   corpses = []
   bloodT = []
   
-  fps = 0;
-  setInterval(debug,500)
-  
   var engine = new Engine();
   engine.startup();
   engine.run();
+  
+  debugTool = new DebugTool()
 }
-var debug = function(){
-	fps = floor(frameRate())
-}
+
 function draw() {
   drawTiles()
   drawBlood()
   drawCorpses()
   drawSpores();
-	
-	if(fps!==0){
-  	fill(255)
-  	textSize(32);
-    text(fps, 10, 30) 
-	}
+  drawDebug();
 }
