@@ -42,8 +42,8 @@ Engine.prototype.update = function(){
   this.crpDecCounter++;
   this.grwFoodCounter++;
   setTimeout(this.update.bind(this),10)
-  if(new Date().getTime() - t > 8)
-	console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
+  if(debugTool.on && new Date().getTime() - t > 8)
+	  console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
 }
 Engine.prototype.bloodFade = function(){
   for(var i = bloodT.length-1 ; i >= 0 ; i--){

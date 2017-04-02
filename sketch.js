@@ -11,11 +11,13 @@ function setup() {
   corpses = []
   bloodT = []
   
+  debugTool = new DebugTool()
+  
   var engine = new Engine();
   engine.startup();
   engine.run();
   
-  debugTool = new DebugTool()
+  
 }
 
 function draw() {
