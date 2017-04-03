@@ -1,6 +1,7 @@
 Spore = function(x,y,size){
-	this.x = x || floor(random(mapSize/cellSize))*cellSize+cellSize/2
-	this.y = y || floor(random(mapSize/cellSize))*cellSize+cellSize/2
+  var coords = this.spawnCords()
+  this.x = x ||coords[0]
+	this.y = y ||coords[1]
 	this.speed = cellSpeed
 	this.vel = {x:random(-1,1),y:random(-1,1)}
 	this.food = 100; //saturation
@@ -14,6 +15,14 @@ Spore = function(x,y,size){
 	this.bleedAmm = 0;
 	this.bleeding = false;
 	this.tileIndx = 0;
+}
+Spore.prototype.spawnCords = function(){
+  do{
+  var x = random(mapSize)
+  var y = random(mapSize)
+  var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize)
+  } while(!tiles[indx].land)
+  return [x,y]
 }
 Spore.prototype.draw = function(){
   push()
