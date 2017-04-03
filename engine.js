@@ -34,7 +34,7 @@ Engine.prototype.update = function(){
     this.growFood();
     this.grwFoodCounter = 0;
  }
-  if(this.bldCounter == 40){
+  if(this.bldCounter == 20){
     this.bloodFade();
     this.bldCounter = 0;
   }

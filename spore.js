@@ -9,11 +9,11 @@ Spore = function(x,y,size){
 	this.tileArea = 0;
 	this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x);
 	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x);
-  this.alive = true;
+	this.alive = true;
 	this.target = {x:this.x,y:this.y}
 	this.bleedAmm = 0;
 	this.bleeding = false;
-	this.tileInd = 0;
+	this.tileIndx = 0;
 }
 Spore.prototype.draw = function(){
   push()
@@ -31,13 +31,16 @@ Spore.prototype.bleed = function(){
   if(this.bleedAmm > 0){
     this.life -= ceil(this.bleedAmm);
     this.bleedAmm-= 0.2
-    bloodT.push(new Blood(this.x,this.y,this.size))
+	if(random() < 0.3 && tiles[this.tileIndx].land){
+      bloodT.push(new Blood(this.x,this.y,this.size))
+	  //console.log(tiles[this.tileIndx].land,this.tileIndx)
+	}
   }
   if(this.bleedAmm <= 0){
     this.bleedAmm = 0;
     this.bleeding = false;
   }else
-    setTimeout(this.bleed.bind(this),1000-floor(this.bleedAmm*40))
+    setTimeout(this.bleed.bind(this),1000-floor(this.bleedAmm*20))
 }
 Spore.prototype.checkMove = function(){
   if(this.x < this.size/2)
@@ -64,7 +67,8 @@ Spore.prototype.checkCollision = function(){
 }
 Spore.prototype.update = function(){
   this.tileArea = this.chckArea();
-  var index = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
+  this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
+  var index = this.tileIndx
   //////Food
   this.food-= 0.25;
   if(tiles[index].food < 0){

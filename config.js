@@ -8,4 +8,4 @@ var inc = 0.006*cellSize;
 var det = 6;
 
 var maxFood = 100 // units
-var foodGrowRate = 50 // ms*10 lower = faster
+var foodGrowRate = 60 // ms*10 lower = faster
