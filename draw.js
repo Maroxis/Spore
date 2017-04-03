@@ -1,9 +1,14 @@
 function drawTiles(){
-  loadPixels()
   for(var i = 0; i < tiles.length; i++){
     tiles[i].draw()
   }
   updatePixels()
+  image(pg,0,0,mapSize,mapSize)
+}
+function drawWater(){
+  for(var i = 0; i < tiles.length; i++){
+    tiles[i].genWater()
+  }
 }
 function drawBlood(){
 	for(var i =0; i< bloodT.length; i++){

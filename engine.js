@@ -7,6 +7,8 @@ Engine = function(){
 
 Engine.prototype.startup = function(){
   loadTerrain()
+  drawWater()
+  loadPixels()
   cellNum = mapSize/cellSize
   for(var i=0; i < sporeNum; i++){
 	spores.push(new Spore())
@@ -19,7 +21,7 @@ Engine.prototype.run = function(){
 
 Engine.prototype.update = function(){
   
- var t = new Date().getTime();
+ t = new Date().getTime();
  if(this.updSprCounter == 3){
     this.updateSpores()
     this.updSprCounter = 0;
@@ -42,8 +44,11 @@ Engine.prototype.update = function(){
   this.crpDecCounter++;
   this.grwFoodCounter++;
   setTimeout(this.update.bind(this),10)
-  if(debugTool.on && new Date().getTime() - t > 8)
-	  console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
+  if(debugTool.on){
+	debugTool.exeTime = new Date().getTime() - t
+	if(debugTool.exeTime > 8)
+		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
+  }
 }
 Engine.prototype.bloodFade = function(){
   for(var i = bloodT.length-1 ; i >= 0 ; i--){

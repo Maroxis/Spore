@@ -1,11 +1,12 @@
 DebugTool = function(){
-  this.on = false;
+  this.on = true;
   this.showFps = true;
   this.tileDeb = false;
   this.sporeDeb = true;
   this.fps = 0;
   this.selectedTile = -1;
   this.selectedSpore = -1;
+  this.exeTime = 0;
   this.gatherInfo();
 }
 function mouseClicked(){

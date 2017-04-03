@@ -2,6 +2,7 @@ function setup() {
   mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
   createCanvas(mapSize, mapSize);
+  pg = createGraphics(mapSize, mapSize);
   noStroke()
   noiseDetail(det)
   pixelDensity(1);

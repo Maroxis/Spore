@@ -23,6 +23,13 @@ Tile.prototype.growFood = function(){
     }
   }
 }
+Tile.prototype.genWater = function(){
+  if(this.food < 0){
+	  pg.noStroke()
+	  pg.fill(this.col[0],this.col[1],this.col[2],255)
+	  pg.rect(this.x,this.y,cellSize,cellSize)
+  }
+}
 Tile.prototype.draw = function(){
   for(var y = 0; y < cellSize; y++){
     for(var x = 0; x < cellSize; x++){
@@ -32,12 +39,6 @@ Tile.prototype.draw = function(){
       pixels[index +1 ] = this.col[1] - 1*this.food/5
       pixels[index +2 ] = this.col[2] - 3*this.food/5
       pixels[index +3 ] = 255
-      }
-      else{
-        pixels[index] = this.col[0]
-        pixels[index +1 ] = this.col[1]
-        pixels[index +2 ] = this.col[2]
-        pixels[index +3 ] = 255
       }
     }
   }
