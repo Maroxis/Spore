@@ -42,7 +42,7 @@ Corpse.prototype.draw =function(){
   rotate(this.facing)//
 	fill(128,floor(100/ceil(this.food)),0,55 + this.food*2)
 	ellipse(0,0,this.size*0.9,this.size)
-	fill(16,16,16,140+this.food)
+	fill(16,16,16,55 + this.food*2)
 	ellipse(0,-this.size/5,this.size/2,this.size/3)
 	pop()
 }

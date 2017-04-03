@@ -1,8 +1,10 @@
-Spore = function(x,y,size){
-  var coords = this.spawnCords()
+Spore = function(x,y,size,dna){
+  if(arguments.length < 2)
+    var coords = this.spawnCords()
   this.x = x ||coords[0]
 	this.y = y ||coords[1]
 	this.speed = cellSpeed
+	this.action = 0; // 0 Eat / 1 Bite / 2 Run
 	this.vel = {x:random(-1,1),y:random(-1,1)}
 	this.food = 100; //saturation
 	this.size = size || sporeSize
@@ -11,10 +13,28 @@ Spore = function(x,y,size){
 	this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x);
 	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x);
 	this.alive = true;
-	this.target = {x:this.x,y:this.y}
 	this.bleedAmm = 0;
 	this.bleeding = false;
-	this.tileIndx = 0;
+	this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize);
+	this.dna = dna || this.genDna()
+	this.brain = new Brain(this.dna)
+	this.brain.getData(this)
+}
+Spore.prototype.genDna = function(){
+  var dna = {inp:[],out:[]}
+  for(var i = 0; i < 6; i++){//input number
+    dna.inp.push([])
+    for(var j = 0; j < 10; j++){ //layer number
+     dna.inp[i].push(random())
+    }
+  }
+  for(var i = 0; i < 10; i++){ //layer number
+    dna.out.push([])
+    for(var j = 0; j < 6; j++){//output number
+     dna.out[i].push(random())
+    }
+  }
+  return dna
 }
 Spore.prototype.spawnCords = function(){
   do{
@@ -85,11 +105,11 @@ Spore.prototype.update = function(){
       if(this.food < 0)
        this.food = 0;
   }
-  else if(tiles[index].food > 1 && this.food < 100)
+  else if(tiles[index].food > 1 && this.food < 100 && this.action == 0)
     this.eatGrass(tiles[index])
       
   var sp = this.checkCollision()
-  if( sp && this.isFacing(sp) && random() < 0.4 ){
+  if( sp && this.isFacing(sp) && random() < 0.4 && this.action == 1 ){
     this.bite(sp)
   } 
   //bleed
@@ -102,7 +122,7 @@ Spore.prototype.update = function(){
   //////move
   if(this.rotate()){ //finished rotation
     if(random() < 0.03){
-      this.changeDirection()
+      this.makeDecision()
     }else
       this.move(index);
   }
@@ -146,6 +166,10 @@ Spore.prototype.move = function(index){
   dx *= this.speed;
   dy *= this.speed;
   
+  if(this.action == 2){//run
+    dx *= 1.4;
+    dy *= 1.4;
+  }
   if(this.bleeding){
     dx *= 0.8;
     dy *= 0.8;
@@ -185,6 +209,15 @@ Spore.prototype.chckCol = function(spore){
 	if(Math.pow((spore.x-this.x),2) + Math.pow((this.y-spore.y),2) <= Math.pow((this.size/2+spore.size/2),2)){
 		return true;
 	}
+}
+Spore.prototype.makeDecision = function(){
+    this.brain.getData(this)
+  	var actions = this.brain.calculate()
+  	this.vel.x = actions[0].x
+  	this.vel.y = actions[0].y
+  	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x)
+  	this.action = actions[1]
+  	this.speed = cellSpeed*actions[2]
 }
 Spore.prototype.changeDirection = function(){	
   this.vel.x = random(-1,1)
