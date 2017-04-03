@@ -155,7 +155,7 @@ Spore.prototype.checkLife = function(){
     this.life+=1;
     this.food-=1
   }
-  else if(this.food === 0){
+  else if(this.food <= 0){
     this.life--;
   }
 }
