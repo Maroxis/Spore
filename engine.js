@@ -4,6 +4,7 @@ Engine = function(){
   this.crpDecCounter = 0;
   this.grwFoodCounter = 0;
   this.sprDecCounter = 0;
+  this.speed = 10;
 }
 
 Engine.prototype.startup = function(){
@@ -65,10 +66,10 @@ Engine.prototype.update = function(){
   this.crpDecCounter++;
   this.grwFoodCounter++;
   this.sprDecCounter++;
-  setTimeout(this.update.bind(this),10)
+  setTimeout(this.update.bind(this),this.speed)
   if(debugTool.on){
 	debugTool.exeTime = new Date().getTime() - t
-	if(debugTool.exeTime > 8)
+	if(debugTool.exeTime > 10)
 		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
   }
 }
