@@ -4,17 +4,8 @@ Corpse = function(x,y,size,food,facing){
   this.size = size
   this.food = food + 10;
   this.tileIndx = this.getTiles()
-  this.tileArea = this.chckArea();
   this.facing = facing
   this.alive = false;
-}
-Corpse.prototype.chckArea = function(){
-	this.tileArea = 0;
-	var indx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
-	if(indx%cellNum > floor(cellNum/2)) // 0 1 // 0 0 // areas
-		this.tileArea++;			            // 0 1 // 2 2 // 0-3
-	if(indx > floor(cellNum*(cellNum/2)))
-		this.tileArea+=2;
 }
 Corpse.prototype.getTiles = function(){
   var indx = floor(this.y/cellSize)*(cellNum)+floor(this.x/cellSize)

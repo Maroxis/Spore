@@ -1,7 +1,7 @@
 Brain = function(dna){
   this.inputs = [];
   this.inWeights = dna.inp;
-  this.layer = [0,0,0,0,0,0,0,0,0,0];
+  this.layer = [];
   this.outWeights= dna.out;
   this.output = [0,0,0,0,0,0];
 }
@@ -17,22 +17,25 @@ Brain.prototype.getData = function(spore){
   this.outweights = spore.dna.out
 }
 Brain.prototype.calculate = function(){
-  this.layer = [0,0,0,0,0,0,0,0,0,0];
+  this.layer = []
+  for(var i = 0; i < brainNodeNum; i++){
+    this.layer.push(0)
+  }
   ///// PART 1 -> calculate layer
-  for(var j = 0; j < 10; j++){ //number of nodes in layer
-    for(var i = 0; i < 6; i++){ //num of inp
+  for(var j = 0; j < brainNodeNum; j++){ //number of nodes in layer
+    for(var i = 0; i < this.inputs.length; i++){ //num of inp
         this.layer[j] +=  this.inputs[i]*this.inWeights[i][j]
     }
   }
   var min = Math.min.apply(null, this.layer);
   var max = Math.max.apply(null, this.layer);
-  for(var i = 0; i < 10; i++){ //num of inp
+  for(var i = 0; i < brainNodeNum; i++){
         this.layer[i] = map(this.layer[i],min,max,0,1)
   } 
   this.output = [0,0,0,0,0,0];
   //// PART 2 -> calculate outputs
   for(var j = 0; j < 6; j++){ //num of outp
-    for(var i = 0; i < 10; i++){ //num of nodes in layer
+    for(var i = 0; i < brainNodeNum; i++){ //num of nodes in layer
         this.output[j] +=  this.layer[i]*this.outWeights[i][j]
     }
   }

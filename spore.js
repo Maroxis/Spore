@@ -9,7 +9,6 @@ Spore = function(x,y,size,dna){
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
-	this.tileArea = 0;
 	this.facing = PI/2+Math.atan2(this.vel.y, this.vel.x);
 	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x);
 	this.alive = true;
@@ -24,11 +23,11 @@ Spore.prototype.genDna = function(){
   var dna = {inp:[],out:[]}
   for(var i = 0; i < 6; i++){//input number
     dna.inp.push([])
-    for(var j = 0; j < 10; j++){ //layer number
+    for(var j = 0; j < brainNodeNum; j++){ //layer number
      dna.inp[i].push(random())
     }
   }
-  for(var i = 0; i < 10; i++){ //layer number
+  for(var i = 0; i < brainNodeNum; i++){ //layer number
     dna.out.push([])
     for(var j = 0; j < 6; j++){//output number
      dna.out[i].push(random())
@@ -83,19 +82,18 @@ Spore.prototype.checkMove = function(){
 }
 Spore.prototype.checkCollision = function(){
   for(var i = 0; i < spores.length; i++){
-    if(i != spores.indexOf(this) && this.tileArea == spores[i].tileArea && this.chckCol(spores[i])){
+    if(i != spores.indexOf(this) && this.chckCol(spores[i])){
 					return spores[i];
     }
   }
   for(i = 0; i < corpses.length; i++){
-    if(this.tileArea == corpses[i].tileArea && this.chckCol(corpses[i])){
+    if(this.chckCol(corpses[i])){
       return corpses[i]
     }
   }
   return false;
 }
 Spore.prototype.update = function(){
-  this.tileArea = this.chckArea();
   this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
   var index = this.tileIndx
   //////Food
@@ -196,14 +194,6 @@ Spore.prototype.rotate = function(){
   else
     this.facing -= 0.3
   return false;
-}
-Spore.prototype.chckArea = function(){
-	this.tileArea = 0;
-	var indx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
-	if(indx%cellNum > floor(cellNum/2)) // 0 1 // 0 0 // areas
-		this.tileArea++;			   // 0 1 // 2 2 // 0-3
-	if(indx > floor(cellNum*(cellNum/2)))
-		this.tileArea+=2;
 }
 Spore.prototype.chckCol = function(spore){
 	if(Math.pow((spore.x-this.x),2) + Math.pow((this.y-spore.y),2) <= Math.pow((this.size/2+spore.size/2),2)){
