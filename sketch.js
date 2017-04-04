@@ -14,7 +14,7 @@ function setup() {
   
   debugTool = new DebugTool()
   
-  var engine = new Engine();
+  engine = new Engine();
   engine.startup();
   engine.run();
   

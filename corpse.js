@@ -43,7 +43,7 @@ Corpse.prototype.decay = function(){
     tiles[this.tileIndx[i]].bFert += 0.5;
     if(this.food <= 0){
       corpses.splice(corpses.indexOf(this),1);
-      spores.push(new Spore())
+      engine.makeSpore()
       return
     }
   }

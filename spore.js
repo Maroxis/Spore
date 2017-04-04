@@ -1,5 +1,5 @@
-Spore = function(x,y,size,dna){
-  if(arguments.length < 2)
+Spore = function(dna,gen,size,x,y){
+  if(arguments.length < 4)
     var coords = this.spawnCords()
   this.x = x ||coords[0]
 	this.y = y ||coords[1]
@@ -18,8 +18,8 @@ Spore = function(x,y,size,dna){
 	this.brain = new Brain(dna)
 	this.brain.getData(this)
 	this.age = 0;
+	this.generation = gen || 0;
 	setInterval(function(){this.age++}.bind(this),1000)
-	setInterval(this.makeDecision.bind(this),200)
 }
 Spore.prototype.spawnCords = function(){
   do{

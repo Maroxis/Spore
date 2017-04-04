@@ -26,6 +26,34 @@ Brain.prototype.genDna = function(){
     }
   }
 }
+Brain.prototype.mixDna = function(dna){
+  var newDna = {inWeights:[],outWeights:[]}
+  var rSplit = floor(brainNodeNum*random())
+  for(var i = 0; i < this.inputs.length; i++){//input number
+    newDna.inWeights.push([])
+    for(var j = 0; j < brainNodeNum; j++){ //layer number
+    if(j < rSplit)
+      newDna.inWeights[i].push(this.inWeights)
+    else
+      newDna.inWeights[i].push(dna.inWeights)
+    }
+  }
+  
+  var rSplit = floor(6*random())
+  for(var i = 0; i < brainNodeNum; i++){ //layer number
+    newDna.outWeights.push([])
+    for(var j = 0; j < 6; j++){//output number
+    if(random() < mutChan)
+      newDna.outWeights[i].push(random())
+    else if(j < rSplit)
+      newDna.outWeights[i].push(this.outWeights)
+    else
+      newDna.outWeights[i].push(dna.outWeights)
+    }
+  }
+  
+  return newDna
+}
 Brain.prototype.getData = function(spore){
   this.inputs = []
   this.inputs.push(spore.x/mapSize)

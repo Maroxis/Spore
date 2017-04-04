@@ -6,6 +6,7 @@ var sporeSize = 12
 var cellSpeed = 0.6
 
 var brainNodeNum = 10;
+var mutChan = 0.01
 
 var inc = 0.006*cellSize;
 var det = 6;
