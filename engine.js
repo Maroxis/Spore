@@ -27,7 +27,7 @@ Engine.prototype.makeSpore = function(){
     var sp2 = spores[floor(random(spores.length))]
   }while(sp1.age < random()*maxAge && sp2.age < random()*maxAge)
   var dna = sp1.brain.mixDna(sp2)
-  var generation = sp1.generation > sp2.generation ? sp1.generation : sp1.generation;
+  var generation = sp1.generation > sp2.generation ? sp1.generation : sp2.generation;
   generation++;
   spores.push(new Spore(dna,generation))
 }

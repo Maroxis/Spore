@@ -13,7 +13,7 @@ Brain.prototype.genDna = function(){
   this.inWeights = []
   this.outWeights = []
   
-  for(var i = 0; i < 5; i++){//input number
+  for(var i = 0; i < 6; i++){//input number
     this.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
      this.inWeights[i].push(random())
@@ -64,6 +64,7 @@ Brain.prototype.getData = function(spore){
   this.inputs.push(spore.food/100)
   this.inputs.push(spore.bleeding)
   this.inputs.push(tiles[spore.tileIndx].food/100)
+  this.inputs.push(spore.checkCollision() ? true : false)
 }
 Brain.prototype.calculate = function(){
   this.layer = []
