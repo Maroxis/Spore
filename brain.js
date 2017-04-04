@@ -64,7 +64,7 @@ Brain.prototype.getData = function(spore){
   this.inputs.push(spore.food/100)
   this.inputs.push(spore.bleeding)
   this.inputs.push(tiles[spore.tileIndx].food/100)
-  this.inputs.push(spore.checkCollision() ? true : false)
+  this.inputs.push(spore.isFacing(spore.checkCollision()))
 }
 Brain.prototype.calculate = function(){
   this.layer = []
