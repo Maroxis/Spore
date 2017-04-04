@@ -15,25 +15,11 @@ Spore = function(x,y,size,dna){
 	this.bleedAmm = 0;
 	this.bleeding = false;
 	this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize);
-	this.dna = dna || this.genDna()
-	this.brain = new Brain(this.dna)
+	this.brain = new Brain(dna)
 	this.brain.getData(this)
-}
-Spore.prototype.genDna = function(){
-  var dna = {inp:[],out:[]}
-  for(var i = 0; i < 6; i++){//input number
-    dna.inp.push([])
-    for(var j = 0; j < brainNodeNum; j++){ //layer number
-     dna.inp[i].push(random())
-    }
-  }
-  for(var i = 0; i < brainNodeNum; i++){ //layer number
-    dna.out.push([])
-    for(var j = 0; j < 6; j++){//output number
-     dna.out[i].push(random())
-    }
-  }
-  return dna
+	this.age = 0;
+	setInterval(function(){this.age++}.bind(this),1000)
+	setInterval(this.makeDecision.bind(this),200)
 }
 Spore.prototype.spawnCords = function(){
   do{
@@ -94,37 +80,42 @@ Spore.prototype.checkCollision = function(){
   return false;
 }
 Spore.prototype.update = function(){
-  this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize)
-  var index = this.tileIndx
+  this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize);
+  var index = this.tileIndx;
+  
+  switch(this.action){
+    case 0: //eat grass
+      if(tiles[index].food > 1 && this.food < 100)
+        this.eatGrass();
+      break;
+    case 1: //bite
+      var sp = this.checkCollision()
+      if( sp && this.isFacing(sp) && random() < 0.4){
+        this.bite(sp);
+      } 
+      break;
+    case 2: //run
+      this.food --;
+      break;
+    case 3:
+      break;
+  }
   //////Food
   this.food-= 0.25;
-  if(tiles[index].food < 0){
-      this.food+= tiles[index].food
-      if(this.food < 0)
-       this.food = 0;
-  }
-  else if(tiles[index].food > 1 && this.food < 100 && this.action == 0)
-    this.eatGrass(tiles[index])
-      
-  var sp = this.checkCollision()
-  if( sp && this.isFacing(sp) && random() < 0.4 && this.action == 1 ){
-    this.bite(sp)
-  } 
+
+  
   //bleed
   if(this.bleedAmm > 0 && !this.bleeding){
     this.bleeding = true;
-    this.bleed()
+    this.bleed();
   }
   /////life
-    this.checkLife()
+    this.checkLife();
   //////move
   if(this.rotate()){ //finished rotation
-    if(random() < 0.03){
-      this.makeDecision()
-    }else
-      this.move(index);
+      this.move();
   }
-  return(this.life > 0) //alive
+  return(this.life > 0); //alive
 }
 Spore.prototype.isFacing = function(spore){
   var angle = PI/2 + Math.atan2(spore.y - this.y, spore.x - this.x);
@@ -144,9 +135,9 @@ Spore.prototype.bite = function(target){
     this.food+=2;
   }
 }
-Spore.prototype.eatGrass = function(tile){
+Spore.prototype.eatGrass = function(){
   this.food+= 1;
-  tile.food-= 1;
+  tiles[this.tileIndx].food-= 1;
 }
 Spore.prototype.checkLife = function(){
   if(!this.bleeding && this.food > 60 && this.life < 100 && random() < 0+this.food/500){
@@ -157,7 +148,7 @@ Spore.prototype.checkLife = function(){
     this.life--;
   }
 }
-Spore.prototype.move = function(index){
+Spore.prototype.move = function(){
   var dx = this.vel.x;
   var dy = this.vel.y;
   
@@ -172,7 +163,7 @@ Spore.prototype.move = function(index){
     dx *= 0.8;
     dy *= 0.8;
   }
-  if(!tiles[index].land){
+  if(!tiles[this.tileIndx].land){
     dx *= 0.6;
     dy *= 0.6;
   }
@@ -208,9 +199,4 @@ Spore.prototype.makeDecision = function(){
   	this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x)
   	this.action = actions[1]
   	this.speed = cellSpeed*actions[2]
-}
-Spore.prototype.changeDirection = function(){	
-  this.vel.x = random(-1,1)
-  this.vel.y = random(-1,1)
-  this.tFacing = PI/2+Math.atan2(this.vel.y, this.vel.x)
 }
