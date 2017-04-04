@@ -49,7 +49,7 @@ Engine.prototype.update = function(){
  }
  if(this.sprDecCounter == 20){
     this.sporesMkDec()
-    this.csprDecCounter = 0;
+    this.sprDecCounter = 0;
  }
   if(this.grwFoodCounter == foodGrowRate){
     this.growFood();
@@ -64,6 +64,7 @@ Engine.prototype.update = function(){
   this.bldCounter++;
   this.crpDecCounter++;
   this.grwFoodCounter++;
+  this.sprDecCounter++;
   setTimeout(this.update.bind(this),10)
   if(debugTool.on){
 	debugTool.exeTime = new Date().getTime() - t
@@ -72,7 +73,8 @@ Engine.prototype.update = function(){
   }
 }
 Engine.prototype.sporesMkDec = function(){
-  for(var i = spores.length; i >= 0; i++){
+    
+  for(var i = spores.length-1; i >= 0; i--){
     spores[i].makeDecision()
   }
 }

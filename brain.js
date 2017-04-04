@@ -1,7 +1,7 @@
 Brain = function(dna){
   if(dna){
-    this.inWeights = dna.inp;
-    this.outWeights = dna.out;
+    this.inWeights = dna.inWeights;
+    this.outWeights = dna.outWeights;
   }else
   this.genDna()
   
@@ -13,7 +13,7 @@ Brain.prototype.genDna = function(){
   this.inWeights = []
   this.outWeights = []
   
-  for(var i = 0; i < 6; i++){//input number
+  for(var i = 0; i < 5; i++){//input number
     this.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
      this.inWeights[i].push(random())
@@ -27,17 +27,20 @@ Brain.prototype.genDna = function(){
   }
 }
 Brain.prototype.mixDna = function(dna){
+  dna = {inWeights: dna.brain.inWeights,outWeights: dna.brain.outWeights}
   var newDna = {inWeights:[],outWeights:[]}
   var rSplit = floor(brainNodeNum*random())
   for(var i = 0; i < this.inputs.length; i++){//input number
     newDna.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
     if(j < rSplit)
-      newDna.inWeights[i].push(this.inWeights)
+      newDna.inWeights[i].push(this.inWeights[i][j])
     else
-      newDna.inWeights[i].push(dna.inWeights)
-    }
+      newDna.inWeights[i].push(dna.inWeights[i][j])
+    } 
+    
   }
+  
   
   var rSplit = floor(6*random())
   for(var i = 0; i < brainNodeNum; i++){ //layer number
@@ -46,9 +49,9 @@ Brain.prototype.mixDna = function(dna){
     if(random() < mutChan)
       newDna.outWeights[i].push(random())
     else if(j < rSplit)
-      newDna.outWeights[i].push(this.outWeights)
+      newDna.outWeights[i].push(this.outWeights[i][j])
     else
-      newDna.outWeights[i].push(dna.outWeights)
+      newDna.outWeights[i].push(dna.outWeights[i][j])
     }
   }
   
@@ -56,17 +59,16 @@ Brain.prototype.mixDna = function(dna){
 }
 Brain.prototype.getData = function(spore){
   this.inputs = []
-  this.inputs.push(spore.x/mapSize)
-  this.inputs.push(spore.y/mapSize)
+  this.inputs.push(abs(spore.facing%(PI*2)/(PI*2)))
   this.inputs.push(spore.life/100)
   this.inputs.push(spore.food/100)
   this.inputs.push(spore.bleeding)
-  this.inputs.push(tiles[spore.tileIndx].food)
+  this.inputs.push(tiles[spore.tileIndx].food/100)
 }
 Brain.prototype.calculate = function(){
   this.layer = []
   for(var i = 0; i < brainNodeNum; i++){
-    this.layer.push(0)
+    this.layer[i] = 0;
   }
   ///// PART 1 -> calculate layer
   for(var j = 0; j < brainNodeNum; j++){ //number of nodes in layer
@@ -86,23 +88,30 @@ Brain.prototype.calculate = function(){
         this.outputs[j] +=  this.layer[i]*this.outWeights[i][j]
     }
   }
-  var min = Math.min.apply(null, this.outputs);
-  var max = Math.max.apply(null, this.outputs);
+  var min = Math.min.apply(null, this.outputs)*0.9;
+  var max = Math.max.apply(null, this.outputs)*1.1;
   for(var i = 0; i < 6; i++){ //num of out
-    if(i < 2)
-      this.outputs[i] = map(this.outputs[i],min,max,-1,1)
-    else
       this.outputs[i] = map(this.outputs[i],min,max,0,1)
   }
   ////PART 3 -> return actions
-  var vel = {x:this.outputs[0],y:this.outputs[1]}
+  
+  var turn
+  if(this.outputs[0] > this.outputs[1] && this.outputs[0] > 0.5 )
+    turn = -0.1
+  else if(this.outputs[1] > 0.5)
+    turn = 0.1
+  else
+    turn = 0;
+    
   var action = []
   action.push(this.outputs[2])
   action.push(this.outputs[3])
   action.push(this.outputs[4])
   action = action.indexOf(Math.max.apply(null, action));
+  
   var speed = this.outputs[5]
-  return [vel,action,speed]
+  
+  return [turn,action,speed]
 }
 /*
                       BRAIN STRUCTURE
