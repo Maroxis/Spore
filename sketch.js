@@ -2,12 +2,14 @@ function setup() {
   mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
   createCanvas(mapSize, mapSize);
-  pg = createGraphics(mapSize, mapSize);
+  pg = document.getElementById('waterCanv')
+  pg.width = mapSize;
+  pg.height = mapSize;
   noStroke()
   noiseDetail(det)
   pixelDensity(1);
   frameRate(60)
-  
+
   tiles = []
   spores = []
   corpses = []

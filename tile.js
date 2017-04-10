@@ -25,9 +25,8 @@ Tile.prototype.growFood = function(){
 }
 Tile.prototype.genWater = function(){
   if(this.food < 0){
-	  pg.noStroke()
-	  pg.fill(this.col[0],this.col[1],this.col[2],255)
-	  pg.rect(this.x,this.y,cellSize,cellSize)
+	  pg.getContext("2d").fillStyle="rgb("+this.col[0]+","+this.col[1]+","+this.col[2]+")"
+	  pg.getContext("2d").fillRect(this.x,this.y,cellSize,cellSize)
   }
 }
 Tile.prototype.draw = function(){
