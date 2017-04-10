@@ -6,13 +6,15 @@ Engine = function(){
   this.sprDecCounter = 0;
   this.speed = 10;
   this.clock;
+  this.fastForward = 0;
 }
 Engine.prototype.startup = function(){
   if(!tiles[0])
    loadTerrain()
+   
   drawWater()
   loadPixels()
-  cellNum = mapSize/cellSize
+  
   if(!spores[0]){
     for(var i=0; i < sporeNum; i++){
   	spores.push(new Spore())
@@ -47,7 +49,8 @@ Engine.prototype.run = function(){
 }
 
 Engine.prototype.update = function(){
-	
+  var done = false
+	while(this.fastForward > 0 || !done){
   t = new Date().getTime();
 	
   this.updSprCounter++;
@@ -78,10 +81,18 @@ Engine.prototype.update = function(){
   }
 
   if(debugTool.on){
-	debugTool.exeTime = new Date().getTime() - t
-	if(debugTool.exeTime > 10)
-		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
+  	debugTool.exeTime = new Date().getTime() - t
+  	if(debugTool.exeTime > 10)
+  		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
   }
+  if(this.fastForward === 0){
+    done = true
+  } else{
+    this.fastForward--
+    if(this.fastForward % 10000 === 0)
+      console.log(this.fastForward/10000)
+    }
+	}
 }
 Engine.prototype.sporesMkDec = function(){
     
