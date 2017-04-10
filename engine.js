@@ -57,6 +57,8 @@ Engine.prototype.run = function(){
 }
 
 Engine.prototype.update = function(){
+  if(this.fastF > 0)
+   clearInterval(this.clock)
   var done = false
 	while(this.fastF > 0 || !done){
   t = new Date().getTime();
@@ -99,8 +101,10 @@ Engine.prototype.update = function(){
     this.fastF--
     if(this.fastF % 10000 === 0)
       console.log(this.fastF/10000)
-    if(this.fastF === 0)
+    if(this.fastF === 0){
       loop()
+      this.clock = setInterval(function(){this.update()}.bind(this),this.speed)
+    }
     }
     
 	}
