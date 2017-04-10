@@ -1,7 +1,7 @@
 Spore = function(dna,gen,size,x,y){
   if(arguments.length < 4)
     var coords = this.spawnCords()
-  this.x = x || parseFloat(coords[0])
+	this.x = x || parseFloat(coords[0])
 	this.y = y || parseFloat(coords[1])
 	this.speed = cellSpeed;
 	this.dSpeed = this.speed
@@ -38,6 +38,12 @@ Spore.prototype.draw = function(){
 	ellipse(0,0,this.size*0.9,this.size)
 	fill(0,0,255,155+this.food)
 	ellipse(0,-this.size/5,this.size/2,this.size/3)
+	
+  rotate(-0.5)
+	ellipse(0,-this.size*1.5,this.size*0.2,this.size*0.2)
+  rotate(1)
+	ellipse(0,-this.size*1.5,this.size*0.2,this.size*0.2)
+	
 	pop()
 }
 Spore.prototype.bleed = function(){
@@ -152,6 +158,7 @@ Spore.prototype.checkLife = function(){
 }
 Spore.prototype.move = function(){
   this.facing += this.turn
+  this.turn = 0;
   this.dSpeed = this.speed
   
   if(this.action == 2){//run

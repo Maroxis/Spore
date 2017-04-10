@@ -59,11 +59,28 @@ Brain.prototype.mixDna = function(dna){
 }
 Brain.prototype.getData = function(spore){
   this.inputs = []
+  
   this.inputs.push(abs(spore.facing%(PI*2)/(PI*2)))
   this.inputs.push(spore.life/100)
   this.inputs.push(spore.food/100)
   this.inputs.push(spore.bleeding)
+  
+  var ang = 0.5
+  
+  var x = spore.x - Math.cos(spore.facing+PI/2 - ang) * spore.size * 1.5
+  var y =	spore.y - Math.sin(spore.facing+PI/2 - ang) * spore.size * 1.5
+  var indx1 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+
+  var x = spore.x - Math.cos(spore.facing+PI/2 + ang) * spore.size * 1.5
+  var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 1.5
+  var indx2 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+  indx1 = indx1 < 0 ? 0 : indx1
+  indx2 = indx2 < 0 ? 0 : indx2
+  //console.log(x,y,indx1)
   this.inputs.push(tiles[spore.tileIndx].food/100)
+  this.inputs.push(tiles[indx1].food/100)
+  this.inputs.push(tiles[indx2].food/100)
+  
   this.inputs.push(spore.isFacing(spore.checkCollision()))
 }
 Brain.prototype.calculate = function(){
