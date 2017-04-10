@@ -30,15 +30,19 @@ Tile.prototype.genWater = function(){
   }
 }
 Tile.prototype.draw = function(){
+  
   for(var y = 0; y < cellSize; y++){
+    var index = ((this.x) + (y + this.y) * width) * 4;
     for(var x = 0; x < cellSize; x++){
-      var index = ((x + this.x) + (y + this.y) * width) * 4;
-      if(this.food >= 0){
-      pixels[index] = this.col[0] - 4*this.food/5
-      pixels[index +1 ] = this.col[1] - 1*this.food/5
-      pixels[index +2 ] = this.col[2] - 3*this.food/5
-      pixels[index +3 ] = 255
+      
+      if(this.land){
+        pixels[index] = this.col[0] - 4*this.food/5
+        pixels[index +1 ] = this.col[1] - 1*this.food/5
+        pixels[index +2 ] = this.col[2] - 3*this.food/5
+        pixels[index +3 ] = 255
       }
+      
+      index += 4;
     }
   }
 }

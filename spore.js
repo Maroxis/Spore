@@ -38,12 +38,6 @@ Spore.prototype.draw = function(){
 	ellipse(0,0,this.size*0.9,this.size)
 	fill(0,0,255,155+this.food)
 	ellipse(0,-this.size/5,this.size/2,this.size/3)
-	/*  eyes
-  rotate(-0.5)
-	ellipse(0,-this.size*1.5,this.size*0.2,this.size*0.2)
-  rotate(1)
-	ellipse(0,-this.size*1.5,this.size*0.2,this.size*0.2)
-	*/
 	pop()
 }
 Spore.prototype.bleed = function(){

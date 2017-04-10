@@ -81,6 +81,11 @@ DebugTool.prototype.draw = function(){
       translate(sp.x,sp.y)
       rotate(sp.facing)
       ellipse(0,0,sp.size*0.9,sp.size)
+      // eyes
+      rotate(-0.5)
+    	ellipse(0,-sp.size*1.5,sp.size*0.2,sp.size*0.2)
+      rotate(1)
+    	ellipse(0,-sp.size*1.5,sp.size*0.2,sp.size*0.2)
       pop()
     }
   }
