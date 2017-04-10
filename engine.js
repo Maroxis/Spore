@@ -6,7 +6,15 @@ Engine = function(){
   this.sprDecCounter = 0;
   this.speed = 10;
   this.clock;
-  this.fastForward = 0;
+  this.fastF = 0;
+}
+Engine.prototype.fastForward = function(amm){
+  if(amm){
+    noLoop()
+    this.fastF = amm
+  }
+  else
+    return this.fastF
 }
 Engine.prototype.startup = function(){
   if(!tiles[0])
@@ -31,13 +39,13 @@ Engine.prototype.makeSpore = function(){
   var maxAge = -1;
   for(var i = 0; i < spores.length; i++){
     if(spores[i].age > max){
-      maxAge = spores[i].age
+      maxAge = spores[i].age*spores[i].age
     }
   }
   do{
     var sp1 = spores[floor(random(spores.length))]
     var sp2 = spores[floor(random(spores.length))]
-  }while(sp1.age < random()*maxAge && sp2.age < random()*maxAge)
+  }while(sp1.age*sp1.age < random()*maxAge && sp2.age*sp2.age < random()*maxAge)
   var dna = sp1.brain.mixDna(sp2)
   var generation = sp1.generation > sp2.generation ? sp1.generation : sp2.generation;
   generation++;
@@ -50,7 +58,7 @@ Engine.prototype.run = function(){
 
 Engine.prototype.update = function(){
   var done = false
-	while(this.fastForward > 0 || !done){
+	while(this.fastF > 0 || !done){
   t = new Date().getTime();
 	
   this.updSprCounter++;
@@ -85,12 +93,13 @@ Engine.prototype.update = function(){
   	if(debugTool.exeTime > 10)
   		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
   }
-  if(this.fastForward === 0){
+  if(this.fastF === 0){
     done = true
+    loop()
   } else{
-    this.fastForward--
-    if(this.fastForward % 10000 === 0)
-      console.log(this.fastForward/10000)
+    this.fastF--
+    if(this.fastF % 10000 === 0)
+      console.log(this.fastF/10000)
     }
 	}
 }
