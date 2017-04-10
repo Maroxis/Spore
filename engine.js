@@ -95,12 +95,14 @@ Engine.prototype.update = function(){
   }
   if(this.fastF === 0){
     done = true
-    loop()
   } else{
     this.fastF--
     if(this.fastF % 10000 === 0)
       console.log(this.fastF/10000)
+    if(this.fastF === 0)
+      loop()
     }
+    
 	}
 }
 Engine.prototype.sporesMkDec = function(){
