@@ -8,12 +8,15 @@ Engine = function(){
   this.clock;
 }
 Engine.prototype.startup = function(){
-  loadTerrain()
+  if(!tiles[0])
+   loadTerrain()
   drawWater()
   loadPixels()
   cellNum = mapSize/cellSize
-  for(var i=0; i < sporeNum; i++){
-	spores.push(new Spore())
+  if(!spores[0]){
+    for(var i=0; i < sporeNum; i++){
+  	spores.push(new Spore())
+    }
   }
 }
 Engine.prototype.changeSpeed = function(speed){

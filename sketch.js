@@ -1,5 +1,14 @@
 p5.disableFriendlyErrors = true;
 function setup() {
+  
+  if(localStorage.getItem("spores") !== null && confirm('Do you want to load last session?')){ 
+	  loadSession()
+ 	}else{
+ 	  spores = []
+ 	  corpses = []
+ 	  tiles = []
+ 	}
+  
   mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
   createCanvas(mapSize, mapSize);
@@ -10,10 +19,6 @@ function setup() {
   noiseDetail(det)
   pixelDensity(1);
   frameRate(60)
-
-  tiles = []
-  spores = []
-  corpses = []
   bloodT = []
   
   debugTool = new DebugTool()
@@ -24,7 +29,6 @@ function setup() {
   
   testFps(0,0)
 }
-
 function testFps(count,lFPSCt){ // detecting low performance
 	if(count >= 50){
 	  if(lFPSCt > 10)
