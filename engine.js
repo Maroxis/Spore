@@ -5,8 +5,8 @@ Engine = function(){
   this.grwFoodCounter = 0;
   this.sprDecCounter = 0;
   this.speed = 10;
+  this.clock;
 }
-
 Engine.prototype.startup = function(){
   loadTerrain()
   drawWater()
@@ -15,6 +15,12 @@ Engine.prototype.startup = function(){
   for(var i=0; i < sporeNum; i++){
 	spores.push(new Spore())
   }
+}
+Engine.prototype.changeSpeed = function(speed){
+  if(speed)
+	this.speed = speed;
+  clearInterval(this.clock)
+  this.clock = setInterval(function(){this.update()}.bind(this),this.speed)
 }
 Engine.prototype.makeSpore = function(){
   var maxAge = -1;
@@ -34,12 +40,19 @@ Engine.prototype.makeSpore = function(){
 }
 
 Engine.prototype.run = function(){
-  this.update()
+  this.clock = setInterval(function(){this.update()}.bind(this),this.speed)
 }
 
 Engine.prototype.update = function(){
-  
- t = new Date().getTime();
+	
+  t = new Date().getTime();
+	
+  this.updSprCounter++;
+  this.bldCounter++;
+  this.crpDecCounter++;
+  this.grwFoodCounter++;
+  this.sprDecCounter++;
+
  if(this.updSprCounter == 3){
     this.updateSpores()
     this.updSprCounter = 0;
@@ -61,12 +74,6 @@ Engine.prototype.update = function(){
     this.bldCounter = 0;
   }
 
-  this.updSprCounter++;
-  this.bldCounter++;
-  this.crpDecCounter++;
-  this.grwFoodCounter++;
-  this.sprDecCounter++;
-  setTimeout(this.update.bind(this),this.speed)
   if(debugTool.on){
 	debugTool.exeTime = new Date().getTime() - t
 	if(debugTool.exeTime > 10)
