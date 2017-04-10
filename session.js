@@ -1,22 +1,35 @@
 loadSession = function(){
+  
+  til = JSON.parse(localStorage.getItem("tiles"))
+ 	for ( var i = 0; i < til.length; i++){
+ 	  tiles.push(new Tile())
+ 	  for (val in til[i]){
+ 	    tiles[i][val] = til[i][val]
+ 	  }
+ 	}
+
   spor = JSON.parse(localStorage.getItem("spores"))
  	for ( var i = 0; i < spor.length; i++){
- 	  spor[i].__proto__= Spore.prototype; 
- 	  spor[i].brain.__proto__ = Brain.prototype
+ 	  spores.push(new Spore())
+   	for (val in spor[i]){
+   	  if(val == 'brain'){
+   	    spores[i][val] = new Brain()
+   	    	for (br in spor[i][val]){
+   	    	  spores[i][val][br] = spor[i][val][br]
+   	    	}
+   	  }else
+   	    spores[i][val] = spor[i][val]
+   	}
  	}
- 	spores = spor
- 	
+
  	corp = JSON.parse(localStorage.getItem("corpses"))
  	for ( var i = 0; i < corp.length; i++){
- 	  corp[i].__proto__= Corpse.prototype; 
+ 	  corpses.push(new Corpse())
+ 	  for(val in corp[i]){
+ 	    corpses[i][val] = corp[i][val]
+ 	  }
  	}
- 	corpses = corp
  	
- 	til = JSON.parse(localStorage.getItem("tiles"))
- 	for ( var i = 0; i < til.length; i++){
- 	  til[i].__proto__= Tile.prototype; 
- 	}
- 	tiles = til
 }
 saveSession = function(){
   localStorage.setItem('spores', JSON.stringify(spores))

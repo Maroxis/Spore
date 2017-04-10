@@ -1,13 +1,7 @@
 p5.disableFriendlyErrors = true;
 function setup() {
   
-  if(localStorage.getItem("spores") !== null && confirm('Do you want to load last session?')){ 
-	  loadSession()
- 	}else{
- 	  spores = []
- 	  corpses = []
- 	  tiles = []
- 	}
+  
   
   mapSize-=mapSize%cellSize;
   ellipseMode(CENTER)
@@ -20,6 +14,15 @@ function setup() {
   pixelDensity(1);
   frameRate(60)
   bloodT = []
+  spores = []
+ 	corpses = []
+ 	tiles = []
+ 	
+  cellNum = mapSize/cellSize
+  
+  if(localStorage.getItem("spores") !== null && confirm('Do you want to load last session?')){ 
+	  loadSession()
+ 	}
   
   debugTool = new DebugTool()
   
