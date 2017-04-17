@@ -180,7 +180,7 @@ Spore.prototype.chckCol = function(spore){
 Spore.prototype.makeDecision = function(){
     this.brain.getData(this)
   	var actions = this.brain.calculate()
-  	this.turn = actions[0]/4
+  	this.turn = actions[0]
   	this.action = actions[1]
   	this.speed = cellSpeed*actions[2]
 }

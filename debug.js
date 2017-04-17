@@ -84,8 +84,10 @@ DebugTool.prototype.draw = function(){
       // eyes
       rotate(-0.5)
     	ellipse(0,-sp.size*1.5,sp.size*0.2,sp.size*0.2)
+    	ellipse(0,-sp.size*5,sp.size*0.2,sp.size*0.2)
       rotate(1)
     	ellipse(0,-sp.size*1.5,sp.size*0.2,sp.size*0.2)
+    	ellipse(0,-sp.size*5,sp.size*0.2,sp.size*0.2)
       pop()
     }
   }

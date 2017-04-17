@@ -13,7 +13,7 @@ Brain.prototype.genDna = function(){
   this.inWeights = []
   this.outWeights = []
   
-  for(var i = 0; i < 8; i++){//input number
+  for(var i = 0; i < 10; i++){//input number
     this.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
      this.inWeights[i].push(random())
@@ -70,17 +70,29 @@ Brain.prototype.getData = function(spore){
   var x = spore.x - Math.cos(spore.facing+PI/2 - ang) * spore.size * 1.5
   var y =	spore.y - Math.sin(spore.facing+PI/2 - ang) * spore.size * 1.5
   var indx1 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+  
+  var x = spore.x - Math.cos(spore.facing+PI/2 - ang) * spore.size * 5
+  var y =	spore.y - Math.sin(spore.facing+PI/2 - ang) * spore.size * 5
+  var indx2 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
 
   var x = spore.x - Math.cos(spore.facing+PI/2 + ang) * spore.size * 1.5
   var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 1.5
-  var indx2 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+  var indx3 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+  
+  var x = spore.x - Math.cos(spore.facing+PI/2 + ang) * spore.size * 5
+  var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 5
+  var indx4 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
   
   var tile1F = tiles[indx1] ? tiles[indx1].food/100 : 0
   var tile2F = tiles[indx2] ? tiles[indx2].food/100 : 0
+  var tile3F = tiles[indx3] ? tiles[indx3].food/100 : 0
+  var tile4F = tiles[indx4] ? tiles[indx4].food/100 : 0
   //console.log(x,y,indx1)
   this.inputs.push(tiles[spore.tileIndx].food/100)
   this.inputs.push(tile1F)
   this.inputs.push(tile2F)
+  this.inputs.push(tile3F)
+  this.inputs.push(tile4F)
   
   this.inputs.push(spore.isFacing(spore.checkCollision()))
 }
