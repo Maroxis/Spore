@@ -3,11 +3,13 @@ DebugTool = function(){
   this.showFps = true;
   this.tileDeb = false;
   this.sporeDeb = true;
+  this.showStats = true;
   this.fps = 0;
   this.selectedTile = -1;
   this.selectedSpore = -1;
   this.exeTime = 0;
-  this.gatherInfo();
+  if(this.on)
+    this.gatherInfo();
 }
 function mouseClicked(){
   if(debugTool.on){
@@ -44,7 +46,6 @@ function mouseClicked(){
   }
 }
 DebugTool.prototype.gatherInfo = function(){
-  if(this.on){
     if(this.showFps){
     this.fps =floor(frameRate())
     }
@@ -54,13 +55,12 @@ DebugTool.prototype.gatherInfo = function(){
     if(this.sporeDeb && this.selectedSpore != -1){
       console.log(this.selectedSpore)
     }
-  }
-  setTimeout(this.gatherInfo.bind(this),400)
+  setTimeout(this.gatherInfo.bind(this),1000)
 }
 DebugTool.prototype.draw = function(){
   if(this.on){
     if(this.showFps){
-    	fill(255)
+    	fill(255,128)
     	textSize(32);
       text(this.fps, 10, 30) 
     }
@@ -89,6 +89,19 @@ DebugTool.prototype.draw = function(){
     	ellipse(0,-sp.size*1.5,sp.size*0.2,sp.size*0.2)
     	ellipse(0,-sp.size*5,sp.size*0.2,sp.size*0.2)
       pop()
+    }
+    if(this.showStats){
+      fill(255,128)
+    	textSize(28);
+    	var highGen = spores[0].generation
+    	var lowGen = spores[0].generation
+    	spores.forEach(function(sp){
+    	  if(sp.generation > highGen)
+    	    highGen = sp.generation
+    	 else if(sp.generation < lowGen)
+    	    lowGen = sp.generation
+    	})
+      text(`Top Gen: ${highGen}   Low Gen: ${lowGen}`, 60, 30) 
     }
   }
 }
