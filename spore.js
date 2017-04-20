@@ -19,6 +19,7 @@ Spore = function(dna,gen,size,x,y){
 	this.brain.getData(this)
 	this.age = 0;
 	this.generation = gen || 0;
+	this.agression = 0;
 
 	setInterval(function(){this.age++}.bind(this),1000)
 }
@@ -36,7 +37,7 @@ Spore.prototype.draw = function(){
   rotate(this.facing)
 	fill(255,55+this.life*2,55+this.life*2,155+this.food)
 	ellipse(0,0,this.size*0.9,this.size)
-	fill(0,0,255,155+this.food)
+	fill(this.agression*10,0,255-this.agression*10,155+this.food)
 	ellipse(0,-this.size/5,this.size/2,this.size/3)
 	pop()
 }
@@ -94,6 +95,7 @@ Spore.prototype.update = function(){
       var sp = this.checkCollision()
       if( sp && this.isFacing(sp) && random() < 0.4){
         this.bite(sp);
+        this.agression++
       } 
       break;
     case 2: //run
@@ -127,6 +129,8 @@ Spore.prototype.isFacing = function(spore){
     return false;
 }
 Spore.prototype.bite = function(target){
+  if(spores.indexOf(this)==spores.indexOf(target))
+    return 
   if(target.alive){
     target.life-=5;
     target.bleedAmm+=1
