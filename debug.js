@@ -2,6 +2,7 @@ DebugTool = function(){
   this.on = true;
   this.showFps = true;
   this.tileDeb = false;
+  this.tileHov = true;
   this.sporeDeb = true;
   this.showStats = true;
   this.fps = 0;
@@ -72,6 +73,20 @@ DebugTool.prototype.draw = function(){
       rect(tile.x,tile.y,cellSize,cellSize)
       pop()
     }
+	if(this.tileHov){
+		var ind = floor(mouseY/cellSize)*(mapSize/cellSize)+floor(mouseX/cellSize)
+		if(tiles[ind]){
+			var tile = tiles[ind]
+			push()
+			noFill()
+			stroke(255,255,255)
+			rect(tile.x,tile.y,cellSize,cellSize)
+			textSize(cellSize*2)
+			text(Math.floor(tile.food),tile.x-(cellSize/2),tile.y)
+			pop()
+		}
+		
+	}
     if(this.sporeDeb && this.selectedSpore !== -1){
       var sp = this.selectedSpore
       push()
