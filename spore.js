@@ -4,8 +4,9 @@ Spore = function(dna,gen,size,x,y){
 	this.x = x || parseFloat(coords[0])
 	this.y = y || parseFloat(coords[1])
 	this.speed = cellSpeed;
+	this.run = false;
 	this.dSpeed = this.speed
-	this.action = 0; // 0 Eat / 1 Bite / 2 Run
+	this.action = 0; // >0.1 Eat / <-0.1 Bite 
 	this.food = 100; //saturation
 	this.size = size || sporeSize
 	this.life = 100;
@@ -86,24 +87,19 @@ Spore.prototype.update = function(){
   this.tileIndx = floor(this.y/cellSize)*(mapSize/cellSize)+floor(this.x/cellSize);
   var index = this.tileIndx;
   
-  switch(this.action){
-    case 0: //eat grass
+  //action
+  if(this.action > 0.1){ //eat grass
       if(tiles[index].food > 1 && this.food < 100)
         this.eatGrass();
-      break;
-    case 1: //bite
+  }
+    else if(this.action < -0.1){ //bite
       var sp = this.checkCollision()
       if( sp && this.isFacing(sp) && random() < 0.4){
         this.bite(sp);
         this.agression++
-      } 
-      break;
-    case 2: //run
-      this.food --;
-      break;
-    case 3:
-      break;
+    } 
   }
+  
   //////Food
   if(!tiles[this.tileIndx].land)
     this.food-=0.5;
@@ -158,7 +154,13 @@ Spore.prototype.move = function(){
   this.facing += this.turn
   this.turn = 0;
   this.dSpeed = this.speed
-  
+  if(this.run){
+	  this.dSpeed *= 2
+	  this.food--
+  }
+  if(this.dSpeed < 0){//walking backward
+	  this.dSpeed *= 0.4
+  }
   if(this.action == 2){//run
     this.dSpeed *= 1.4;
   }
@@ -185,6 +187,7 @@ Spore.prototype.makeDecision = function(){
     this.brain.getData(this)
   	var actions = this.brain.calculate()
   	this.turn = actions[0]
-  	this.action = actions[1]
-  	this.speed = cellSpeed*actions[2]
+  	this.action = actions[2]
+  	this.speed = cellSpeed*actions[1]
+	this.run = actions[3]
 }

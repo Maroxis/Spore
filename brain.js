@@ -7,7 +7,7 @@ Brain = function(dna){
   
   this.inputs = [];
   this.layer = [];
-  this.outputs = [0,0,0,0,0,0];
+  this.outputs = [0,0,0,0];
 }
 Brain.prototype.genDna = function(){
   this.inWeights = []
@@ -16,13 +16,13 @@ Brain.prototype.genDna = function(){
   for(var i = 0; i < 10; i++){//input number
     this.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
-     this.inWeights[i].push(random())
+     this.inWeights[i].push(random(-1,1))
     }
   }
   for(var i = 0; i < brainNodeNum; i++){ //layer number
     this.outWeights.push([])
     for(var j = 0; j < 6; j++){//output number
-     this.outWeights[i].push(random())
+     this.outWeights[i].push(random(-1,1))
     }
   }
 }
@@ -62,8 +62,8 @@ Brain.prototype.getData = function(spore){
   
   this.inputs.push(abs(spore.facing%(PI*2)/(PI*2)))
   this.inputs.push(spore.life/100)
-  this.inputs.push(spore.food/100)
-  this.inputs.push(spore.bleeding)
+  this.inputs.push(spore.food > 0 ? floor(spore.food)/100 : 0)
+  this.inputs.push(spore.bleeding ? 1 : 0)
   
   var ang = 0.5
   
@@ -83,18 +83,18 @@ Brain.prototype.getData = function(spore){
   var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 5
   var indx4 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
   
-  var tile1F = tiles[indx1] ? tiles[indx1].food/100 : 0
-  var tile2F = tiles[indx2] ? tiles[indx2].food/100 : 0
-  var tile3F = tiles[indx3] ? tiles[indx3].food/100 : 0
-  var tile4F = tiles[indx4] ? tiles[indx4].food/100 : 0
+  var tile1F = tiles[indx1] ? floor(tiles[indx1].food)/maxFood : 0
+  var tile2F = tiles[indx2] ? floor(tiles[indx2].food)/maxFood : 0
+  var tile3F = tiles[indx3] ? floor(tiles[indx3].food)/maxFood : 0
+  var tile4F = tiles[indx4] ? floor(tiles[indx4].food)/maxFood : 0
   //console.log(x,y,indx1)
-  this.inputs.push(tiles[spore.tileIndx].food/100)
+  this.inputs.push(tiles[spore.tileIndx] ? floor(tiles[spore.tileIndx].food)/maxFood : 0)
   this.inputs.push(tile1F)
   this.inputs.push(tile2F)
   this.inputs.push(tile3F)
   this.inputs.push(tile4F)
   
-  this.inputs.push(spore.isFacing(spore.checkCollision()))
+  this.inputs.push(spore.isFacing(spore.checkCollision()) ? 1 : 0)
 }
 Brain.prototype.calculate = function(){
   this.layer = []
@@ -105,53 +105,44 @@ Brain.prototype.calculate = function(){
   for(var j = 0; j < brainNodeNum; j++){ //number of nodes in layer
     for(var i = 0; i < this.inputs.length; i++){ //num of inp
         this.layer[j] +=  this.inputs[i]*this.inWeights[i][j]
+		this.layer[j] = Math.tanh(this.layer[j])
     }
   }
-  var min = Math.min.apply(null, this.layer);
-  var max = Math.max.apply(null, this.layer);
-  for(var i = 0; i < brainNodeNum; i++){
-        this.layer[i] = map(this.layer[i],min,max,0,1)
-  } 
-  this.outputs = [0,0,0,0,0,0];
+  this.outputs = [0,0,0,0];
   //// PART 2 -> calculate outputs
-  for(var j = 0; j < 6; j++){ //num of outp
+  for(var j = 0; j < 4; j++){ //num of outp
     for(var i = 0; i < brainNodeNum; i++){ //num of nodes in layer
         this.outputs[j] +=  this.layer[i]*this.outWeights[i][j]
+		this.outputs[j] = Math.tanh(this.outputs[j])
     }
-  }
-  var min = Math.min.apply(null, this.outputs)*0.9;
-  var max = Math.max.apply(null, this.outputs)*1.1;
-  for(var i = 0; i < 6; i++){ //num of out
-      this.outputs[i] = map(this.outputs[i],min,max,0,1)
   }
   ////PART 3 -> return actions
   
   var turn
-  if(this.outputs[0] > this.outputs[1] && this.outputs[0] > 0.5 )
-    turn = -0.1
-  else if(this.outputs[1] > 0.5)
-    turn = 0.1
-  else
-    turn = 0;
-    
-  var action = []
-  action.push(this.outputs[2])
-  action.push(this.outputs[3])
-  action.push(this.outputs[4])
-  action = action.indexOf(Math.max.apply(null, action));
+	if(Math.abs(this.outputs[0]) > 0.1)
+		turn = this.outputs[0]
+	else
+		turn = 0;
+
+	var speed = this.outputs[1]
+	var action = this.outputs[2]
+	var run
+		if (this.outputs[3] > 0)
+			run = true
+		else
+			run = false;
   
-  var speed = this.outputs[5]
-  
-  return [turn,action,speed]
+
+  return [turn,action,speed,run]
 }
 /*
                       BRAIN STRUCTURE
 INPUTS:             OUTPUTS:
-  X                   VELX VelY
-  Y                   EAT
-  LIFE                BITE
+  X                   Turn
+  Y                   Speed
+  LIFE                Eat/bite
   FOOD                RUN
-  BLEEDING            SPEED
+  BLEEDING            
   TILE.FOOD
   //TILE.SPORE
   //TILE2.FOOD
