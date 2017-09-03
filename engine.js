@@ -92,7 +92,7 @@ Engine.prototype.update = function(){
 
   if(debugTool.on){
   	debugTool.exeTime = new Date().getTime() - t
-  	if(debugTool.exeTime > 10)
+  	if(debugTool.exeTime > 20)
   		console.log("WARNING High execute time " + (new Date().getTime() - t) + "ms")
   }
   if(this.fastF === 0){

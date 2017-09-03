@@ -13,7 +13,7 @@ Brain.prototype.genDna = function(){
   this.inWeights = []
   this.outWeights = []
   
-  for(var i = 0; i < 10; i++){//input number
+  for(var i = 0; i < 21; i++){//input number /15 'eyes'
     this.inWeights.push([])
     for(var j = 0; j < brainNodeNum; j++){ //layer number
      this.inWeights[i].push(random(-1,1))
@@ -64,37 +64,51 @@ Brain.prototype.getData = function(spore){
   this.inputs.push(spore.life/100)
   this.inputs.push(spore.food > 0 ? floor(spore.food)/100 : 0)
   this.inputs.push(spore.bleeding ? 1 : 0)
+  this.inputs.push(spore.isFacing(spore.checkCollision()) ? 1 : 0)
+	this.inputs.push(tiles[spore.tileIndx] ? floor(tiles[spore.tileIndx].food)/maxFood : 0)
   
   var ang = 0.5
-  
-  var x = spore.x - Math.cos(spore.facing+PI/2 - ang) * spore.size * 1.5
-  var y =	spore.y - Math.sin(spore.facing+PI/2 - ang) * spore.size * 1.5
-  var indx1 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
-  
-  var x = spore.x - Math.cos(spore.facing+PI/2 - ang) * spore.size * 5
-  var y =	spore.y - Math.sin(spore.facing+PI/2 - ang) * spore.size * 5
-  var indx2 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+  for(var i = -1; i < 2 ;i++){
+		var x = spore.x - Math.cos(spore.facing+PI/2 + ang*i) * spore.size * 1
+		var y =	spore.y - Math.sin(spore.facing+PI/2 + ang*i) * spore.size * 1
+		var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+		var tile = tiles[indx] ? floor(tiles[indx].food)/maxFood : 0
+		this.inputs.push(tile)
+  }
+  for(var i = -1; i < 2 ;i++){
+		var x = spore.x - Math.cos(spore.facing+PI/2 + ang*i) * spore.size * 1.5
+		var y =	spore.y - Math.sin(spore.facing+PI/2 + ang*i) * spore.size * 1.5
+		var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+		var tile = tiles[indx] ? floor(tiles[indx].food)/maxFood : 0
+		this.inputs.push(tile)
+  }
+	for(var i = -1; i < 2 ;i++){
+		var x = spore.x - Math.cos(spore.facing+PI/2 + ang*i) * spore.size * 2
+		var y =	spore.y - Math.sin(spore.facing+PI/2 + ang*i) * spore.size * 2
+		var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+		var tile = tiles[indx] ? floor(tiles[indx].food)/maxFood : 0
+		this.inputs.push(tile)
+  }
+	for(var i = -1; i < 2 ;i++){
+		var x = spore.x - Math.cos(spore.facing+PI/2 + ang*i) * spore.size * 3
+		var y =	spore.y - Math.sin(spore.facing+PI/2 + ang*i) * spore.size * 3
+		var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+		var tile = tiles[indx] ? floor(tiles[indx].food)/maxFood : 0
+		this.inputs.push(tile)
+  }
+	for(var i = -1; i < 2 ;i++){
+		var x = spore.x - Math.cos(spore.facing+PI/2 + ang*i) * spore.size * 5
+		var y =	spore.y - Math.sin(spore.facing+PI/2 + ang*i) * spore.size * 5
+		var indx = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
+		var tile = tiles[indx] ? floor(tiles[indx].food)/maxFood : 0
+		this.inputs.push(tile)
+  }
 
-  var x = spore.x - Math.cos(spore.facing+PI/2 + ang) * spore.size * 1.5
-  var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 1.5
-  var indx3 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
-  
-  var x = spore.x - Math.cos(spore.facing+PI/2 + ang) * spore.size * 5
-  var y =	spore.y - Math.sin(spore.facing+PI/2 + ang) * spore.size * 5
-  var indx4 = floor(y/cellSize)*(mapSize/cellSize)+floor(x/cellSize);
-  
-  var tile1F = tiles[indx1] ? floor(tiles[indx1].food)/maxFood : 0
-  var tile2F = tiles[indx2] ? floor(tiles[indx2].food)/maxFood : 0
-  var tile3F = tiles[indx3] ? floor(tiles[indx3].food)/maxFood : 0
-  var tile4F = tiles[indx4] ? floor(tiles[indx4].food)/maxFood : 0
   //console.log(x,y,indx1)
-  this.inputs.push(tiles[spore.tileIndx] ? floor(tiles[spore.tileIndx].food)/maxFood : 0)
-  this.inputs.push(tile1F)
-  this.inputs.push(tile2F)
-  this.inputs.push(tile3F)
-  this.inputs.push(tile4F)
   
-  this.inputs.push(spore.isFacing(spore.checkCollision()) ? 1 : 0)
+
+  
+  
 }
 Brain.prototype.calculate = function(){
   this.layer = []
