@@ -77,7 +77,7 @@ Engine.prototype.update = function(){
     this.cDecay()
     this.crpDecCounter = 0;
  }
- if(this.sprDecCounter == 20){
+ if(this.sprDecCounter == 20){ //cycles for spore decision
     this.sporesMkDec()
     this.sprDecCounter = 0;
  }
@@ -99,7 +99,7 @@ Engine.prototype.update = function(){
     done = true
   } else{
     this.fastF--
-    if(this.fastF % 10000 === 0)
+    if(this.fastF % 10000 === 0 && this.fastF != 0)
       console.log(this.fastF/10000)
     if(this.fastF === 0){
       loop()

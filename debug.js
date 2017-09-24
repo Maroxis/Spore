@@ -46,6 +46,19 @@ function mouseClicked(){
     }
   }
 }
+DebugTool.prototype.benchmark = function(sec){
+	var count = 0
+	time = new Date().getTime()
+	do{
+		if(engine.fastF == 0){
+			engine.fastForward(20)
+			count ++
+		}
+		engine.update()
+	}
+	while(new Date().getTime() < time + (1000*sec))
+	return (Math.floor(count/sec) + ' decision/sec')
+}
 DebugTool.prototype.gatherInfo = function(){
     if(this.showFps){
     this.fps =floor(frameRate())
